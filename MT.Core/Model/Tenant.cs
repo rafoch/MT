@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace MT.Core.Model
 {
@@ -12,18 +13,8 @@ namespace MT.Core.Model
         public string Database { get; set; }
     }
 
-    public class Tenant : Tenant<string>
+    public abstract class Tenant : Tenant<string>
     {
 
-    }
-
-    public abstract class ITenancy : ITenancy<string>
-    {
-
-    }
-
-    public abstract class ITenancy<TKey>
-    {
-        public TKey TenantId { get; set; }
     }
 }
