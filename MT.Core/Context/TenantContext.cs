@@ -29,7 +29,7 @@ namespace MT.Core.Context
         {
             modelBuilder.Entity<TEntity>(builder =>
             {
-                builder.HasQueryFilter(filter => filter.TenantId == "5801E77E-36F0-4F3C-9423-82890C0E3B9A".ToLower());
+                builder.HasQueryFilter(filter => filter.TenantId == "5801E77E-36F0-4F3C-9423-82890C0E3B9A".ToLower()); //todo Tenant ID provider
             });
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
