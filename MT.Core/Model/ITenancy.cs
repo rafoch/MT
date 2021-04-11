@@ -8,11 +8,16 @@ namespace MT.Core.Model
 
     }
 
-    public abstract class ITenancy<TKey>
+    public abstract class ITenancy<TKey> : ITenancy<TKey, string>
+    {
+        
+    }
+
+    public abstract class ITenancy<TKey, ITenantKey>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public TKey Id { get; set; }
-        public TKey TenantId { get; set; }
+        public ITenantKey TenantId { get; set; }
     }
 }

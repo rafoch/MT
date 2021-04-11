@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MT.Core.Services;
 
 namespace MT.Web.Example
 {
@@ -11,14 +13,18 @@ namespace MT.Web.Example
     {
         private readonly XCatalogContext _catalogContext;
         private readonly OBCon _obCon;
+        private readonly TenantManager<X, int> _manager;
         private readonly Guid _testGuid;
+        UserManager<>
 
         public LolzController(
             XCatalogContext catalogContext,
-            OBCon obCon)
+            OBCon obCon,
+            TenantManager<X, int> manager)
         {
             _catalogContext = catalogContext;
             _obCon = obCon;
+            _manager = manager;
             _testGuid = new Guid("5801E77E-36F0-4F3C-9423-82890C0E3B9A");
         }
 
@@ -45,7 +51,7 @@ namespace MT.Web.Example
         {
             _obCon.Ob.Add(new Ob
             {
-                TenantId = _testGuid.ToString()
+                TenantId = 1f
             });
             _obCon.SaveChanges();
             var obs = _obCon.Ob.IgnoreQueryFilters().ToList();

@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MT.Core.Model
 {
-    public class Tenant<TKey> where TKey : IEquatable<TKey>
+    public abstract class Tenant<TKey> 
+        where TKey : IEquatable<TKey>
     {
         [Key]
         public TKey Id { get; set; }

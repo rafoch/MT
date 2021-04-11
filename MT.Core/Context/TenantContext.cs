@@ -6,35 +6,51 @@ using MT.Core.Model;
 
 namespace MT.Core.Context
 {
-    public class TenantContext : DbContext
+    public class TenantContext : TenantContext<ITenancy, string>
     {
         public TenantContext(DbContextOptions options)
             :base(options)
         {
         }
+        }
+
+    public class TenantContext<TUser, TKey> : TenantContext<TUser, TKey, string>
+        where TUser : ITenancy<TKey>
+        where TKey : IEquatable<TKey>
+    {
+        public TenantContext(DbContextOptions options)
+            :base(options)
+        {
+            
+        }
+    }
+
+    public class TenantContext<TUser, TKey, TTenantKey> : DbContext
+        where TUser : ITenancy<TKey, TTenantKey>
+        where TKey : IEquatable<TKey>
+    {
+        public TenantContext(DbContextOptions options)
+            : base(options)
+        {
+
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            List<Type> types = new List<Type>();
-            types.AddRange(modelBuilder.Model.GetEntityTypes().Select(t => t.ClrType).ToList());
-            foreach (var entityType in types)
+            foreach(var entityType in modelBuilder.Model.GetEntityTypes().Select(t => t.ClrType))
             {
-                ConfigureTenantEntity<ITenancy>(entityType, modelBuilder);
+                ConfigureTenantEntity<ITenancy<TKey, TTenantKey>>(entityType, modelBuilder);
             }
             base.OnModelCreating(modelBuilder);
         }
 
-        public static void ConfigureTenantEntity<TEntity>(Type entity, ModelBuilder modelBuilder)
-            where TEntity : ITenancy
+        private static void ConfigureTenantEntity<TEntity>(Type entity, ModelBuilder modelBuilder)
+            where TEntity : ITenancy<TKey, TTenantKey>
         {
             modelBuilder.Entity<TEntity>(builder =>
             {
-                builder.HasQueryFilter(filter => filter.TenantId == "5801E77E-36F0-4F3C-9423-82890C0E3B9A".ToLower()); //todo Tenant ID provider
+                builder.HasQueryFilter(filter => EqualityComparer<TKey>.Default.Equals(filter.Id, filter.Id)); //todo Tenant ID provider
             });
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
         }
     }
 }

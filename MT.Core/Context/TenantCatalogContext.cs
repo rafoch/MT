@@ -24,4 +24,5 @@ namespace MT.Core.Context
 
         public DbSet<TUser> Tenants { get; set; }
     }
+
 }
