@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using MT.Core.Context;
+using MT.Core.Providers;
 
 namespace MT.Web.Example
 {
-    public class OBCon : TenantContext<Ob, int, float>
+    public class OBCon : TenantContext<Ob, int>
     {
-        public OBCon(DbContextOptions<OBCon> options) : base(options)
+        public OBCon(ITenantProvider<Ob, int> provider,
+            DbContextOptions<OBCon> options) : base(provider, options)
         {
         }
 

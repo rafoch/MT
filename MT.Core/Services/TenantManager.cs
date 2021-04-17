@@ -24,7 +24,7 @@ namespace MT.Core.Services
     }
 
     public class TenantManager<TTenant, TKey>
-        where TTenant : Tenant<TKey> 
+        where TTenant : Tenant<TKey>
         where TKey : IEquatable<TKey>
     {
         private readonly TenantCatalogContext<TTenant, TKey> _context;

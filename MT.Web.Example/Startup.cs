@@ -1,11 +1,5 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -20,8 +14,9 @@ namespace MT.Web.Example
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddMultiTenancyCatalog<XCatalogContext>(builder => builder.UseInMemoryDatabase("dsa"));
-            services.AddMultiTenancyContext<OBCon>(builder => builder.UseInMemoryDatabase("dsa"));
+            services.AddMultiTenancy<X, int, Ob>()
+                .AddTenantCatalogContext<XCatalogContext>(builder => builder.UseInMemoryDatabase("dsa"))
+                .AddTenantContext<OBCon>(builder => builder.UseInMemoryDatabase("dsa"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

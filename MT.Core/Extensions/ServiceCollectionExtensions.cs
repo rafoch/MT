@@ -1,48 +1,55 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MT.Core.Context;
 using MT.Core.Model;
-using MT.Core.Services;
 
 namespace MT.Core.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddMultiTenancyCatalog(this IServiceCollection service,
-            Action<DbContextOptionsBuilder> options)
+        public static MultiTenancyBuilder AddMultiTenancy(this IServiceCollection service)
         {
-            service.AddMultiTenancyCatalog<TenantCatalogContext>(options);
-            return service;
+            return AddMultiTenancy<Tenant>(service);
         }
 
-        public static IServiceCollection AddMultiTenancyCatalog<TContext>(
-            this IServiceCollection service, Action<DbContextOptionsBuilder> options) 
-            where TContext : DbContext
+        public static MultiTenancyBuilder AddMultiTenancy<TTenant>(
+            this IServiceCollection service)
+            where TTenant : Tenant<string>
         {
-            service.AddMultiTenancyCatalog<TContext, string>(options);
-            return service;
+            return new MultiTenancyBuilder(typeof(TTenant), typeof(string), service);
         }
 
-        public static IServiceCollection AddMultiTenancyCatalog<TContext, TKey>(
-            this IServiceCollection service, Action<DbContextOptionsBuilder> options)
-            where TContext : DbContext 
+        public static MultiTenancyBuilder AddMultiTenancy<TTenant, TKey>(
+            this IServiceCollection service)
+            where TTenant : Tenant<TKey>
             where TKey : IEquatable<TKey>
         {
-            //register types
-            service.AddDbContext<TContext>();
-            service.AddTransient<TContext>();
-            // service.AddTransient<TenantManager<Tenant<TKey>, TKey>>();
-            return service;
+            return new MultiTenancyBuilder(typeof(TTenant), typeof(TKey), service);
         }
 
+        public static MultiTenancyBuilder AddMultiTenancy<TTenant, TKey, ITenancy>(
+            this IServiceCollection service)
+            where TTenant : Tenant<TKey>
+            where TKey : IEquatable<TKey>
+        {
+            return new MultiTenancyBuilder(typeof(TTenant), typeof(TKey), typeof(ITenancy), service);
+        }
+        
         public static IServiceCollection AddMultiTenancyContext<TContext>(
-            this IServiceCollection service, 
+            this IServiceCollection service,
             Action<DbContextOptionsBuilder> options)
         where TContext : DbContext
         {
             service.AddDbContext<TContext>(options);
+
             return service;
+        }
+
+        private static void AddScoped(IServiceCollection service, Type serviceType, Type concreteType)
+        {
+            service.AddScoped(serviceType, concreteType);
         }
     }
 }

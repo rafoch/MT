@@ -3,53 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using MT.Core.Model;
+using MT.Core.Providers;
 
 namespace MT.Core.Context
 {
-    public class TenantContext : TenantContext<ITenancy, string>
+    public class TenantContext : TenantContext<ITenancy<string>, string>
     {
-        public TenantContext(DbContextOptions options)
-            :base(options)
+        public TenantContext(ITenantProvider<ITenancy<string>, string> provider,
+            DbContextOptions options)
+            : base(provider, options)
         {
-        }
-        }
-
-    public class TenantContext<TUser, TKey> : TenantContext<TUser, TKey, string>
-        where TUser : ITenancy<TKey>
-        where TKey : IEquatable<TKey>
-    {
-        public TenantContext(DbContextOptions options)
-            :base(options)
-        {
-            
         }
     }
 
-    public class TenantContext<TUser, TKey, TTenantKey> : DbContext
-        where TUser : ITenancy<TKey, TTenantKey>
+    public class TenantContext<TUser, TKey> : DbContext
+        where TUser : ITenancy<TKey>
         where TKey : IEquatable<TKey>
     {
-        public TenantContext(DbContextOptions options)
+        private readonly ITenantProvider<TUser, TKey> _provider;
+
+        public TenantContext(ITenantProvider<TUser, TKey> provider,
+            DbContextOptions options)
             : base(options)
         {
-
+            _provider = provider;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            foreach(var entityType in modelBuilder.Model.GetEntityTypes().Select(t => t.ClrType))
+            var entityTypes = modelBuilder.Model.GetEntityTypes().Select(t => t.ClrType).ToList();
+            foreach (var entityType in entityTypes)
             {
-                ConfigureTenantEntity<ITenancy<TKey, TTenantKey>>(entityType, modelBuilder);
+                ConfigureTenantEntity<ITenancy<TKey>>(entityType, modelBuilder);
             }
             base.OnModelCreating(modelBuilder);
         }
 
-        private static void ConfigureTenantEntity<TEntity>(Type entity, ModelBuilder modelBuilder)
-            where TEntity : ITenancy<TKey, TTenantKey>
+        private void ConfigureTenantEntity<TEntity>(Type entity, ModelBuilder modelBuilder)
+            where TEntity : ITenancy<TKey>
         {
             modelBuilder.Entity<TEntity>(builder =>
             {
-                builder.HasQueryFilter(filter => EqualityComparer<TKey>.Default.Equals(filter.Id, filter.Id)); //todo Tenant ID provider
+                builder.HasQueryFilter(filter => EqualityComparer<TKey>.Default.Equals(filter.TenantId, _provider.Get())); //todo Tenant ID provider
             });
         }
     }
