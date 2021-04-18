@@ -3,7 +3,7 @@ using MT.Core.Model;
 
 namespace MT.Web.Example
 {
-    public class X : Tenant<int>
+    public class TenantCatalog : Tenant<int>
     {
 
     }

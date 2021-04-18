@@ -44,7 +44,7 @@ namespace MT.Core.Context
         {
             modelBuilder.Entity<TEntity>(builder =>
             {
-                builder.HasQueryFilter(filter => EqualityComparer<TKey>.Default.Equals(filter.TenantId, _provider.Get())); //todo Tenant ID provider
+                builder.HasQueryFilter(filter => EqualityComparer<TKey>.Default.Equals(filter.TenantId, _provider.Get()));
             });
         }
     }

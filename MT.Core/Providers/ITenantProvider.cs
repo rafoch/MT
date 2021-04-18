@@ -1,4 +1,5 @@
 ﻿using System;
+using MT.Core.Exceptions;
 using MT.Core.Model;
 
 namespace MT.Core.Providers
@@ -19,6 +20,10 @@ namespace MT.Core.Providers
 
         public TKey Get()
         {
+            if (_tenantKey is null)
+            {
+                throw new TenantNotProvidedException();
+            }
             return _tenantKey;
         }
 

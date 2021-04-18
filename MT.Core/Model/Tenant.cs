@@ -12,6 +12,9 @@ namespace MT.Core.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual TKey Id { get; set; }
         public virtual string Server { get; set; }
+        public virtual string Name { get; set; }
+        public virtual string Password { get; set; }
+        public virtual string NormalizedName { get; set; }
         public virtual string Port { get; set; }
         public virtual string Database { get; set; }
     }

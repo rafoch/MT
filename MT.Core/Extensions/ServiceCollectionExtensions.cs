@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MT.Core.Model;
@@ -29,7 +27,7 @@ namespace MT.Core.Extensions
             return new MultiTenancyBuilder(typeof(TTenant), typeof(TKey), service);
         }
 
-        public static MultiTenancyBuilder AddMultiTenancy<TTenant, TKey, ITenancy>(
+        public static MultiTenancyBuilder AddMultiTenancy<TTenant, ITenancy, TKey>(
             this IServiceCollection service)
             where TTenant : Tenant<TKey>
             where TKey : IEquatable<TKey>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +9,7 @@ using MT.Core.Context;
 using MT.Core.Providers;
 using MT.Core.Services;
 
-namespace MT.Core.Extensions
+namespace MT.Core.Model
 {
     public class MultiTenancyBuilder
     {
@@ -119,12 +120,15 @@ namespace MT.Core.Extensions
             return this;
         }
 
-        private MultiTenancyBuilder AddDbContextOptionsBuilder<TContext>(Action<IServiceProvider, DbContextOptionsBuilder> optionsAction) where TContext : DbContext
+        private MultiTenancyBuilder AddDbContextOptionsBuilder<TContext>(
+            Action<IServiceProvider, DbContextOptionsBuilder> optionsAction) 
+            where TContext : DbContext
         {
             Services.TryAdd(new ServiceDescriptor(
                 typeof(DbContextOptions<TContext>),
                 p => CreateDbContextOptions<TContext>(p, optionsAction),
                 ServiceLifetime.Scoped));
+            
             Services.Add(
                 new ServiceDescriptor(
                     typeof(DbContextOptions),

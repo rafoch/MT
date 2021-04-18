@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,34 +13,35 @@ namespace MT.Web.Example
     [ApiController]
     public class LolzController : ControllerBase
     {
-        private readonly XCatalogContext _catalogContext;
-        private readonly OBCon _obCon;
-        private readonly TenantManager<X, int> _manager;
-        private readonly ITenantProvider<Ob, int> _provider;
+        private readonly TenantCatalogContext _catalogContext;
+        private readonly TenantObjectContext _tenantObjectContext;
+        private readonly TenantManager<TenantCatalog, int> _manager;
+        private readonly ITenantProvider<TenantObject, int> _provider;
 
         private readonly Guid _testGuid;
         // UserManager<>
 
         public LolzController(
-            XCatalogContext catalogContext,
-            OBCon obCon,
-            TenantManager<X, int> manager,
-            ITenantProvider<Ob, int> provider)
+            TenantCatalogContext catalogContext,
+            TenantObjectContext tenantObjectContext,
+            TenantManager<TenantCatalog, int> manager,
+            ITenantProvider<TenantObject, int> provider)
         {
             _catalogContext = catalogContext;
-            _obCon = obCon;
+            _tenantObjectContext = tenantObjectContext;
             _manager = manager;
             _provider = provider;
             _testGuid = new Guid("5801E77E-36F0-4F3C-9423-82890C0E3B9A");
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var tenant = new X()
+            var tenant = new TenantCatalog()
             {
+                Password = "super password"
             };
-            _manager.AddTenant(tenant);
+            await _manager.AddTenantAsync(tenant);
             return Ok(tenant);
         }
 
@@ -52,17 +54,17 @@ namespace MT.Web.Example
         }
 
         [HttpGet]
-        [Route("X")]
+        [Route("TenantCatalog")]
         public IActionResult X([FromQuery] int tenantId)
         {
-            _obCon.Ob.Add(new Ob
+            _tenantObjectContext.Ob.Add(new TenantObject
             {
                 TenantId = tenantId
             });
-            _obCon.SaveChanges();
+            _tenantObjectContext.SaveChanges();
             _provider.Set(tenantId);
-            var obs = _obCon.Ob.IgnoreQueryFilters().ToList();
-            var list = _obCon.Ob.ToList();
+            var obs = _tenantObjectContext.Ob.IgnoreQueryFilters().ToList();
+            var list = _tenantObjectContext.Ob.ToList();
             return Ok(list);
         }
     }
