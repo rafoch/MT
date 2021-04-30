@@ -96,5 +96,12 @@ namespace MT.Core.Services
 
         public TTenant Get(TKey id) => _context.Tenants.Filter(t => t.Id, id).FirstOrDefault();
         public Task<TTenant> GetAsync(TKey id) => _context.Tenants.Filter(t => t.Id, id).FirstOrDefaultAsync();
+
+        public string GetTenantPassword(string tenantPassword)
+        {
+            var dataProtector = _dataProtectionProvider.CreateProtector("password hash");
+            var unprotect = dataProtector.Unprotect(tenantPassword);
+            return unprotect;
+        }
     }
 }
