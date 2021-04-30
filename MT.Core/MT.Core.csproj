@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.0.1</Version>
+    <PackageId>MultiTenancy.Core</PackageId>
+    <Product>MultiTenancy.Core</Product>
   </PropertyGroup>
 
   <ItemGroup>
