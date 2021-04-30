@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using MT.Core.Exceptions;
 using MT.Core.Model;
 
@@ -27,7 +28,7 @@ namespace MT.Core.Providers
             return _tenantKey;
         }
 
-        public void Set(TKey key)
+        public void Set([NotNull] TKey key)
         {
             _tenantKey = key;
         }

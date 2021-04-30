@@ -95,8 +95,16 @@ namespace MT.Core.Model
             var userManagerType = typeof(TenantContext<,>).MakeGenericType(TenantType, IdType);
             var customType = typeof(TTenantContext);
             AddTenantProvider();
+            AddTenantFactory(userManagerType, customType);
             Services.AddDbContext<TTenantContext>(optiAction);
             return AddScoped(userManagerType, customType);
+        }
+
+        private MultiTenancyBuilder AddTenantFactory(Type userManagerType, Type type)
+        {
+            var makeGenericType = typeof(TenantContextFactory<,,,>).MakeGenericType(type, TenantCatalogType, TenantType, IdType);
+            var customType = typeof(ITenantContextFactory<>).MakeGenericType(type);
+            return AddScoped(customType, makeGenericType);
         }
 
         private MultiTenancyBuilder AddTenantProvider()

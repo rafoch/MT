@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,10 @@ namespace MT.Web.Example
         {
             services.AddControllers();
             services.AddDataProtection();
-            services.AddMultiTenancy<TenantCatalog, TenantObject, int>()
+            services.AddDbContext<TenantObjectContext>(builder =>
+                builder.UseSqlServer(
+                    "Server=JMB-DK-07\\PUKACZ,6024;Database=MT;User Id=tenant;Password=tenant1234567;"));
+            services.AddMultiTenancy<TenantCatalog, TenantObject, Guid>()
                 .AddTenantCatalogContext<TenantCatalogContext>(builder => builder.UseInMemoryDatabase("dsa"))
                 .AddTenantContext<TenantObjectContext>(builder => builder.UseInMemoryDatabase("dsa"));
         }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MT.Core.Context;
 using MT.Core.Providers;
 using MT.Core.Services;
 
@@ -14,35 +15,27 @@ namespace MT.Web.Example
     public class LolzController : ControllerBase
     {
         private readonly TenantCatalogContext _catalogContext;
-        private readonly TenantObjectContext _tenantObjectContext;
-        private readonly TenantManager<TenantCatalog, int> _manager;
-        private readonly ITenantProvider<TenantObject, int> _provider;
-
-        private readonly Guid _testGuid;
-        // UserManager<>
+        private readonly TenantManager<TenantCatalog, Guid> _manager;
+        private readonly ITenantProvider<TenantObject, Guid> _provider;
+        private readonly ITenantContextFactory<TenantObjectContext> _contextFactory;
 
         public LolzController(
             TenantCatalogContext catalogContext,
-            TenantObjectContext tenantObjectContext,
-            TenantManager<TenantCatalog, int> manager,
-            ITenantProvider<TenantObject, int> provider)
+            TenantManager<TenantCatalog, Guid> manager,
+            ITenantProvider<TenantObject, Guid> provider,
+            ITenantContextFactory<TenantObjectContext> contextFactory)
         {
             _catalogContext = catalogContext;
-            _tenantObjectContext = tenantObjectContext;
             _manager = manager;
             _provider = provider;
-            _testGuid = new Guid("5801E77E-36F0-4F3C-9423-82890C0E3B9A");
+            _contextFactory = contextFactory;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        [HttpPost]
+        public async Task<IActionResult> Index([FromBody] TenantCatalog catalog)
         {
-            var tenant = new TenantCatalog()
-            {
-                Password = "super password"
-            };
-            await _manager.AddTenantAsync(tenant);
-            return Ok(tenant);
+            await _manager.AddTenantAsync(catalog);
+            return Ok(catalog);
         }
 
         [HttpGet]
@@ -54,18 +47,28 @@ namespace MT.Web.Example
         }
 
         [HttpGet]
-        [Route("TenantCatalog")]
-        public IActionResult X([FromQuery] int tenantId)
+        [Route("A")]
+        public IActionResult Context([FromQuery] Guid tenantId)
         {
-            _tenantObjectContext.Ob.Add(new TenantObject
+            _provider.Set(tenantId);
+            var tenantObject = _contextFactory.Create();
+            var first = tenantObject.TenantObject.ToList();
+            return Ok(first);
+        }
+
+        [HttpGet]
+        [Route("B")]
+        public IActionResult ContextAdd([FromQuery] Guid tenantId)
+        {
+            _provider.Set(tenantId);
+            var tenantContext = _contextFactory.Create();
+            var entity = new TenantObject
             {
                 TenantId = tenantId
-            });
-            _tenantObjectContext.SaveChanges();
-            _provider.Set(tenantId);
-            var obs = _tenantObjectContext.Ob.IgnoreQueryFilters().ToList();
-            var list = _tenantObjectContext.Ob.ToList();
-            return Ok(list);
+            };
+            tenantContext.TenantObject.Add(entity);
+            tenantContext.SaveChanges();
+            return Ok(entity);
         }
     }
 }
