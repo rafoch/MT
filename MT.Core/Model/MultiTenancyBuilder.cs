@@ -159,6 +159,10 @@ namespace MT.Core.Model
             return builder.Options;
         }
 
+        /// <summary>
+        /// Migrate all tenants databases to the current migrations on application startup
+        /// </summary>
+        /// <returns><see cref="MultiTenancyBuilder"/> object</returns>
         public MultiTenancyBuilder MigrateTenantContexts()
         {
             return this;
