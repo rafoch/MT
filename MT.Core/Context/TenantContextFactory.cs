@@ -37,7 +37,7 @@ namespace MT.Core.Context
                 throw new TenantNotFoundException(_tenantProvider.Get().ToString());
             }
 
-            var password = _tenantManager.GetTenantPassword(tenant.Password);
+            var password = _tenantManager.GetTenantPassword(tenant.Password, tenant.ConcurencyStamp);
             var connectionStringBuilder = new SqlConnectionStringBuilder
             {
                 DataSource = $"tcp:{tenant.Server},{tenant.Port}",

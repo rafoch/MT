@@ -8,6 +8,11 @@ namespace MT.Core.Model
     public abstract class Tenant<TKey>
         where TKey : IEquatable<TKey>
     {
+        public Tenant()
+        {
+            ConcurencyStamp = Guid.NewGuid().ToString();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual TKey Id { get; set; }
@@ -15,6 +20,7 @@ namespace MT.Core.Model
         public virtual string Name { get; set; }
         public virtual string UserName { get; set; }
         public virtual string Password { get; set; }
+        public virtual string ConcurencyStamp { get; set; }
         public virtual string NormalizedName { get; set; }
         public virtual string Port { get; set; }
         public virtual string Database { get; set; }
