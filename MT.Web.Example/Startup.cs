@@ -15,7 +15,6 @@ namespace MT.Web.Example
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDataProtection();
             services.AddDbContext<TenantObjectContext>(builder =>
                 builder.UseSqlServer(
                     "Server=JMB-DK-07\\PUKACZ,6024;Database=MT;User Id=tenant;Password=tenant1234567;"));

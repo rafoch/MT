@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using MT.Core.Context;
 using MT.Core.Exceptions;
@@ -17,8 +16,7 @@ namespace MT.Core.Services
 {
     public class TenantManager : TenantManager<Tenant, string>
     {
-        public TenantManager(TenantCatalogContext<Tenant, string> context,
-            IDataProtectionProvider dataProtectionProvider) : base(context, dataProtectionProvider)
+        public TenantManager(TenantCatalogContext<Tenant, string> context) : base(context)
         {
         }
     }
@@ -26,8 +24,7 @@ namespace MT.Core.Services
     public class TenantManager<TTenant> : TenantManager<TTenant, string>
         where TTenant : Tenant<string>
     {
-        public TenantManager(TenantCatalogContext<TTenant, string> context,
-            IDataProtectionProvider dataProtectionProvider) : base(context, dataProtectionProvider)
+        public TenantManager(TenantCatalogContext<TTenant, string> context) : base(context)
         {
         }
     }
@@ -37,14 +34,11 @@ namespace MT.Core.Services
         where TKey : IEquatable<TKey>
     {
         private readonly TenantCatalogContext<TTenant, TKey> _context;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
 
         public TenantManager(
-            TenantCatalogContext<TTenant, TKey> context,
-            IDataProtectionProvider dataProtectionProvider)
+            TenantCatalogContext<TTenant, TKey> context)
         {
             _context = context;
-            _dataProtectionProvider = dataProtectionProvider;
         }
 
         /// <summary>
