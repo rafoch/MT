@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +35,7 @@ namespace MT.Core.Model
         /// <value>
         /// The <see cref="Type"/> used for catalog.
         /// </value>
-        public Type TenantCatalogType { get; private set; }
+        private Type TenantCatalogType { get; set; }
 
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace MT.Core.Model
         /// <value>
         /// The <see cref="Type"/> used for tenant id type.
         /// </value>
-        public Type IdType { get; private set; }
+        private Type IdType { get; set; }
 
         /// <summary>
         /// Gets the <see cref="Type"/> used for tenant type.
@@ -53,7 +52,7 @@ namespace MT.Core.Model
         /// <value>
         /// The <see cref="Type"/> used for tenant type.
         /// </value>
-        public Type TenantType { get; private set; }
+        private Type TenantType { get; set; }
 
         /// <summary>
         /// Gets the <see cref="IServiceCollection"/> services are attached to.
@@ -61,7 +60,7 @@ namespace MT.Core.Model
         /// <value>
         /// The <see cref="IServiceCollection"/> services are attached to.
         /// </value>
-        public IServiceCollection Services { get; private set; }
+        private IServiceCollection Services { get; set; }
 
         public virtual MultiTenancyBuilder AddTenantManager<TTenantManager>() where TTenantManager : class
         {
@@ -158,6 +157,11 @@ namespace MT.Core.Model
             optionsAction?.Invoke(applicationServiceProvider, builder);
 
             return builder.Options;
+        }
+
+        public MultiTenancyBuilder MigrateTenantContexts()
+        {
+            return this;
         }
     }
 }
