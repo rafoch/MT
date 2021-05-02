@@ -3,11 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <PackageId>MultiTenancy.Core</PackageId>
     <Product>MultiTenancy.Core</Product>
     <Authors>Rafał Ochotny</Authors>
     <Description>A lightway package to implement MultiTenancy architecture in your .NET Core Applications</Description>
+    <PackageReleaseNotes>- Added password hasher, DataProtection package is no longer needed 😊</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
