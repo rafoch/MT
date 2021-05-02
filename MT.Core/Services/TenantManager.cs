@@ -47,6 +47,11 @@ namespace MT.Core.Services
             _dataProtectionProvider = dataProtectionProvider;
         }
 
+        /// <summary>
+        /// Register tenant in catalog database
+        /// </summary>
+        /// <param name="tenant">Object that implements <see cref="Tenant{TKey}"/> class</param>
+        /// <returns>return Tenant object</returns>
         public TTenant AddTenant(TTenant tenant)
         {
             _context.Tenants.Add(tenant);
@@ -54,6 +59,11 @@ namespace MT.Core.Services
             return tenant;
         }
 
+        /// <summary>
+        /// Register tenant in catalog database
+        /// </summary>
+        /// <param name="tenant">Object that implements <see cref="Tenant{TKey}"/> class</param>
+        /// <returns>return Tenant object</returns>
         public async Task<TTenant> AddTenantAsync(TTenant tenant, CancellationToken cancellationToken = default(CancellationToken))
         {
             var encryptPassword = EncryptionHelper.Encrypt(tenant.Password, tenant.ConcurencyStamp);
@@ -63,6 +73,10 @@ namespace MT.Core.Services
             return tenant;
         }
 
+        /// <summary>
+        /// Removes tenant with specified id from catalog database
+        /// </summary>
+        /// <param name="id">tenant id</param>
         public void RemoveTenant(TKey id)
         {
             var tenant = _context.Tenants.Filter(t => t.Id, id).FirstOrDefault();
@@ -73,12 +87,20 @@ namespace MT.Core.Services
             RemoveTenant(tenant);
         }
 
+        /// <summary>
+        /// Removes tenant from catalog database
+        /// </summary>
+        /// <param name="id">tenant object</param>
         public void RemoveTenant(TTenant tenant)
         {
             _context.Tenants.Remove(tenant);
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Removes tenant with specified id from catalog database
+        /// </summary>
+        /// <param name="id">tenant id</param>
         public async Task RemoveTenantAsync(TKey id)
         {
             var tenant = await _context.Tenants.Filter(t => t.Id, id).FirstOrDefaultAsync();
@@ -89,16 +111,31 @@ namespace MT.Core.Services
             await RemoveTenantAsync(tenant);
         }
 
+        /// <summary>
+        /// Removes tenant from catalog database
+        /// </summary>
+        /// <param name="id">tenant object</param>
         public async Task RemoveTenantAsync(TTenant tenant)
         {
             _context.Tenants.Remove(tenant);
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Gives a tenant object by specific id
+        /// </summary>
+        /// <param name="id">tenant id</param>
+        /// <returns>tenant object</returns>
         public TTenant Get(TKey id) => _context.Tenants.Filter(t => t.Id, id).FirstOrDefault();
+        
+        /// <summary>
+        /// Gives a tenant object by specific id
+        /// </summary>
+        /// <param name="id">tenant id</param>
+        /// <returns>tenant object</returns>
         public Task<TTenant> GetAsync(TKey id) => _context.Tenants.Filter(t => t.Id, id).FirstOrDefaultAsync();
 
-        public string GetTenantPassword(string tenantPassword, string concurrencyStamp)
+        internal string GetTenantPassword(string tenantPassword, string concurrencyStamp)
         {
             var rawPassword = EncryptionHelper.Decrypt(tenantPassword, concurrencyStamp);
             return rawPassword;
