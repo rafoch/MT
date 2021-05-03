@@ -1,22 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.2</Version>
-    <PackageId>MultiTenancy.Core</PackageId>
-    <Product>MultiTenancy.Core</Product>
-    <Authors>Rafał Ochotny</Authors>
-    <Description>A lightway package to implement MultiTenancy architecture in your .NET Core Applications</Description>
-    <PackageReleaseNotes>- Added password hasher, DataProtection package is no longer needed 😊</PackageReleaseNotes>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Version>0.0.3</Version>
+        <PackageId>MultiTenancy.Core</PackageId>
+        <Product>MultiTenancy.Core</Product>
+        <Authors>Rafał Ochotny</Authors>
+        <Description>A lightway package to implement MultiTenancy architecture in your .NET Core Applications</Description>
+        <PackageReleaseNotes>- Added more description to the package and updated example usage</PackageReleaseNotes>
+        <RepositoryUrl>https://github.com/rafoch/MT</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-  </ItemGroup>
+
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    </ItemGroup>
 
 </Project>

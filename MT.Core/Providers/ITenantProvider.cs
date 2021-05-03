@@ -19,6 +19,10 @@ namespace MT.Core.Providers
     {
         private TKey _tenantKey;
 
+        /// <summary>
+        /// Gets tenant id 
+        /// </summary>
+        /// <returns>tenant id</returns>
         public TKey Get()
         {
             if (_tenantKey is null)
@@ -28,6 +32,10 @@ namespace MT.Core.Providers
             return _tenantKey;
         }
 
+        /// <summary>
+        /// Set tenant id
+        /// </summary>
+        /// <param name="key">tenant id</param>
         public void Set([NotNull] TKey key)
         {
             _tenantKey = key;
