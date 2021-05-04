@@ -32,7 +32,7 @@ jobs:
     - name: Dotnet build
       run: dotnet build --configuration Release --no-restore
     - name: Dotnet test
-      run: dotnet build --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal
   publish-nuget:
     runs-on: ubuntu-latest
     steps:
