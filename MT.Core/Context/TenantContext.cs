@@ -9,10 +9,10 @@ using SqlConnectionStringBuilder = System.Data.SqlClient.SqlConnectionStringBuil
 
 namespace MT.Core.Context
 {
-    public class TenantContext : TenantContext<ITenancy<string>, string>
+    public class TenantContext : TenantContext<Tenant<string>, string>
     {
         public TenantContext(
-            ITenantProvider<ITenancy<string>, string> provider,
+            ITenantProvider<Tenant<string>, string> provider,
             DbContextOptions options)
             : base(provider, options)
         {
@@ -25,21 +25,21 @@ namespace MT.Core.Context
         }
     }
 
-    public class TenantContext<TUser, TKey> : DbContext
-        where TUser : ITenancy<TKey>
+    public class TenantContext<TTenant, TKey> : DbContext
+        where TTenant : Tenant<TKey>
         where TKey : IEquatable<TKey>
     {
         private readonly SqlConnectionStringBuilder _connectionStringBuilder;
-        private readonly ITenantProvider<TUser, TKey> _provider;
+        private readonly ITenantProvider<TTenant, TKey> _provider;
 
-        public TenantContext(ITenantProvider<TUser, TKey> provider,
+        public TenantContext(ITenantProvider<TTenant, TKey> provider,
             DbContextOptions options)
             : base(options)
         {
             _provider = provider;
         }
 
-        public TenantContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TUser, TKey> provider)
+        public TenantContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TTenant, TKey> provider)
         {
             _connectionStringBuilder = connectionStringBuilder;
             _provider = provider;

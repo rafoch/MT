@@ -5,8 +5,12 @@ using MT.Core.Model;
 
 namespace MT.Core.Providers
 {
+    public interface ITenantProvider : ITenantProvider<Tenant, string>
+    {
+    }
+
     public interface ITenantProvider<TTenant, TKey>
-        where TTenant : ITenancy<TKey>
+        where TTenant : Tenant<TKey>
         where TKey : IEquatable<TKey>
     {
         TKey Get();
@@ -14,7 +18,7 @@ namespace MT.Core.Providers
     }
 
     public class TenantProvider<TTenant, TKey> : ITenantProvider<TTenant, TKey>
-        where TTenant : ITenancy<TKey>
+        where TTenant : Tenant<TKey>
         where TKey : IEquatable<TKey>
     {
         private TKey _tenantKey;

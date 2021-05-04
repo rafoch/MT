@@ -6,16 +6,16 @@ using MT.Core.Providers;
 
 namespace MT.Web.Example
 {
-    public class TenantObjectContext : TenantContext<TenantObject, Guid>
+    public class TenantObjectContext : TenantContext<TenantCatalog, Guid>
     {
-        public TenantObjectContext(ITenantProvider<TenantObject, Guid> provider,
+        public TenantObjectContext(ITenantProvider<TenantCatalog, Guid> provider,
             DbContextOptions<TenantObjectContext> options) : base(provider, options)
         {
         }
 
         public TenantObjectContext(
             SqlConnectionStringBuilder connectionStringBuilder, 
-            ITenantProvider<TenantObject, Guid> provider) 
+            ITenantProvider<TenantCatalog, Guid> provider) 
             : base(connectionStringBuilder, provider)
         {
         }

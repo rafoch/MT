@@ -8,16 +8,16 @@ using MT.Core.Services;
 namespace MT.Core.Context
 {
     public class TenantContextFactory<TContext, TTenant, TTenancy,TKey> : ITenantContextFactory<TContext>
-        where TContext : TenantContext<TTenancy, TKey> 
+        where TContext : TenantContext<TTenant, TKey> 
         where TTenancy : ITenancy<TKey> 
         where TKey : IEquatable<TKey>
         where TTenant : Tenant<TKey>
     {
-        private ITenantProvider<TTenancy, TKey> _tenantProvider;
+        private ITenantProvider<TTenant, TKey> _tenantProvider;
         private readonly TenantManager<TTenant, TKey> _tenantManager;
         private TContext _context;
         public TenantContextFactory(
-            ITenantProvider<TTenancy,TKey> tenantProvider,
+            ITenantProvider<TTenant, TKey> tenantProvider,
             TenantManager<TTenant, TKey> tenantManager)
         {
             _tenantProvider = tenantProvider;

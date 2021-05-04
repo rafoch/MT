@@ -16,13 +16,13 @@ namespace MT.Web.Example
     {
         private readonly TenantCatalogContext _catalogContext;
         private readonly TenantManager<TenantCatalog, Guid> _manager;
-        private readonly ITenantProvider<TenantObject, Guid> _provider;
+        private readonly ITenantProvider<TenantCatalog, Guid> _provider;
         private readonly ITenantContextFactory<TenantObjectContext> _contextFactory;
 
         public LolzController(
             TenantCatalogContext catalogContext,
             TenantManager<TenantCatalog, Guid> manager,
-            ITenantProvider<TenantObject, Guid> provider,
+            ITenantProvider<TenantCatalog, Guid> provider,
             ITenantContextFactory<TenantObjectContext> contextFactory)
         {
             _catalogContext = catalogContext;

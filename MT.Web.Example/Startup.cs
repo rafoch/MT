@@ -31,7 +31,7 @@ namespace MT.Web.Example
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseMultiTenancy<TenantCatalog, Guid>();
             app.UseHttpsRedirection();
 
             app.UseRouting();

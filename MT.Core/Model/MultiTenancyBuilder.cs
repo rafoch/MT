@@ -15,19 +15,19 @@ namespace MT.Core.Model
         /// <summary>
         /// Creates a new instance of <see cref="MultiTenancyBuilder"/>.
         /// </summary>
-        /// <param name="tenantCatalog">The <see cref="Type"/> to use for the tenant catalog.</param>
+        /// <param name="tTenantType">The <see cref="Type"/> to use for the tTenantType catalog.</param>
         /// <param name="services">The <see cref="IServiceCollection"/> to attach to.</param>
-        public MultiTenancyBuilder(Type tenantCatalog, IServiceCollection services)
+        public MultiTenancyBuilder(Type tTenantType, IServiceCollection services)
         {
-            TenantCatalogType = tenantCatalog;
+            TTenantTypeType = tTenantType;
             Services = services;
         }
 
-        public MultiTenancyBuilder(Type tenantCatalog, Type idType, IServiceCollection services) : this(tenantCatalog, services)
-            => this.IdType = idType;
+        public MultiTenancyBuilder(Type tTenantType, Type tKeyType, IServiceCollection services) : this(tTenantType, services)
+            => this.TKeyType = tKeyType;
 
-        public MultiTenancyBuilder(Type tenantCatalog, Type idType, Type tenantType, IServiceCollection services) : this(tenantCatalog, idType, services)
-            => TenantType = tenantType;
+        public MultiTenancyBuilder(Type tTenantType, Type tKeyType, Type tTenancyType, IServiceCollection services) : this(tTenantType, tKeyType, services)
+            => ITenancyType = tTenancyType;
 
         /// <summary>
         /// Gets the <see cref="Type"/> used catalog.
@@ -35,24 +35,24 @@ namespace MT.Core.Model
         /// <value>
         /// The <see cref="Type"/> used for catalog.
         /// </value>
-        private Type TenantCatalogType { get; set; }
+        private Type TTenantTypeType { get; set; }
 
 
         /// <summary>
-        /// Gets the <see cref="Type"/> used for tenant id type.
+        /// Gets the <see cref="Type"/> used for tTenantType id type.
         /// </summary>
         /// <value>
-        /// The <see cref="Type"/> used for tenant id type.
+        /// The <see cref="Type"/> used for tTenantType id type.
         /// </value>
-        private Type IdType { get; set; }
+        private Type TKeyType { get; set; }
 
         /// <summary>
-        /// Gets the <see cref="Type"/> used for tenant type.
+        /// Gets the <see cref="Type"/> used for tTenantType type.
         /// </summary>
         /// <value>
-        /// The <see cref="Type"/> used for tenant type.
+        /// The <see cref="Type"/> used for tTenantType type.
         /// </value>
-        private Type TenantType { get; set; }
+        private Type ITenancyType { get; set; }
 
         /// <summary>
         /// Gets the <see cref="IServiceCollection"/> services are attached to.
@@ -64,7 +64,7 @@ namespace MT.Core.Model
 
         public virtual MultiTenancyBuilder AddTenantManager<TTenantManager>() where TTenantManager : class
         {
-            var userManagerType = typeof(TenantManager<>).MakeGenericType(TenantCatalogType);
+            var userManagerType = typeof(TenantManager<>).MakeGenericType(TTenantTypeType);
             var customType = typeof(TTenantManager);
 
             return AddScoped(userManagerType, customType);
@@ -80,7 +80,7 @@ namespace MT.Core.Model
             where TTenantCatalogContext : DbContext
         {
             AddDbContextOptionsBuilder<TTenantCatalogContext>((provider, builder) => optionsAction(builder));
-            var userManagerType = typeof(TenantCatalogContext<,>).MakeGenericType(TenantCatalogType, IdType);
+            var userManagerType = typeof(TenantCatalogContext<,>).MakeGenericType(TTenantTypeType, TKeyType);
             var customType = typeof(TTenantCatalogContext);
             Services.AddDbContext<TTenantCatalogContext>(optionsAction);
             AddTenantManager();
@@ -91,7 +91,7 @@ namespace MT.Core.Model
             where TTenantContext : DbContext
         {
             AddDbContextOptionsBuilder<TTenantContext>((provider, builder) => optiAction(builder));
-            var userManagerType = typeof(TenantContext<,>).MakeGenericType(TenantType, IdType);
+            var userManagerType = typeof(TenantContext<,>).MakeGenericType(TTenantTypeType, TKeyType);
             var customType = typeof(TTenantContext);
             AddTenantProvider();
             AddTenantFactory(userManagerType, customType);
@@ -101,22 +101,22 @@ namespace MT.Core.Model
 
         private MultiTenancyBuilder AddTenantFactory(Type userManagerType, Type type)
         {
-            var makeGenericType = typeof(TenantContextFactory<,,,>).MakeGenericType(type, TenantCatalogType, TenantType, IdType);
+            var makeGenericType = typeof(TenantContextFactory<,,,>).MakeGenericType(type, TTenantTypeType, ITenancyType, TKeyType);
             var customType = typeof(ITenantContextFactory<>).MakeGenericType(type);
             return AddScoped(customType, makeGenericType);
         }
 
         private MultiTenancyBuilder AddTenantProvider()
         {
-            var userManagerType = typeof(TenantProvider<,>).MakeGenericType(TenantType, IdType);
-            var serviceType = typeof(ITenantProvider<,>).MakeGenericType(TenantType, IdType);
+            var userManagerType = typeof(TenantProvider<,>).MakeGenericType(TTenantTypeType, TKeyType);
+            var serviceType = typeof(ITenantProvider<,>).MakeGenericType(TTenantTypeType, TKeyType);
             Services.AddScoped(serviceType, userManagerType);
             return this;
         }
 
         private MultiTenancyBuilder AddTenantManager()
         {
-            var userManagerType = typeof(TenantManager<,>).MakeGenericType(TenantCatalogType, IdType);
+            var userManagerType = typeof(TenantManager<,>).MakeGenericType(TTenantTypeType, TKeyType);
             Services.AddScoped(userManagerType);
             return this;
         }
