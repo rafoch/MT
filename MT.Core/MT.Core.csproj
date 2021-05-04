@@ -3,12 +3,14 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.3</Version>
+        <Version>0.0.4</Version>
         <PackageId>MultiTenancy.Core</PackageId>
         <Product>MultiTenancy.Core</Product>
         <Authors>Rafał Ochotny</Authors>
         <Description>A lightway package to implement MultiTenancy architecture in your .NET Core Applications</Description>
-        <PackageReleaseNotes>- Added more description to the package and updated example usage</PackageReleaseNotes>
+        <PackageReleaseNotes>- Added Middleware that search tenant-id in header
+- Change implementation of ITenantProvider, now it's more complex
+- Added some basic tests</PackageReleaseNotes>
         <RepositoryUrl>https://github.com/rafoch/MT</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
 

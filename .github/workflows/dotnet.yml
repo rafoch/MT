@@ -7,6 +7,30 @@ on:
     branches: [ master ]
 
 jobs:
+  build:
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.202'
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Dotnet build
+      run: dotnet build --configuration Release --no-restore
+  test:
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.202'
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Dotnet build
+      run: dotnet build --configuration Release --no-restore
+    - name: Dotnet test
+      run: dotnet build --no-restore --verbosity normal
   publish-nuget:
     runs-on: ubuntu-latest
     steps:

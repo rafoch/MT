@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MT.Core", "MT.Core\MT.Core.csproj", "{99389CDA-E195-4883-9570-559470A87A35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MT.Core", "MT.Core\MT.Core.csproj", "{99389CDA-E195-4883-9570-559470A87A35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MT.Web.Example", "MT.Web.Example\MT.Web.Example.csproj", "{60E4A90C-5C85-4CAD-9338-89DE88895241}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MT.Web.Example", "MT.Web.Example\MT.Web.Example.csproj", "{60E4A90C-5C85-4CAD-9338-89DE88895241}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2D88AFC2-94D4-4417-A066-D61A30637AAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MT.Core.UnitTests", "tests\MT.Core.UnitTests\MT.Core.UnitTests.csproj", "{7B2C80A0-A207-4D35-9078-AC06A81160C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +25,16 @@ Global
 		{60E4A90C-5C85-4CAD-9338-89DE88895241}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60E4A90C-5C85-4CAD-9338-89DE88895241}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60E4A90C-5C85-4CAD-9338-89DE88895241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B2C80A0-A207-4D35-9078-AC06A81160C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B2C80A0-A207-4D35-9078-AC06A81160C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B2C80A0-A207-4D35-9078-AC06A81160C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B2C80A0-A207-4D35-9078-AC06A81160C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7B2C80A0-A207-4D35-9078-AC06A81160C1} = {2D88AFC2-94D4-4417-A066-D61A30637AAA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5995F759-49DB-4CE3-BDA3-257EE943DBA4}
