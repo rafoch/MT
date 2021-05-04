@@ -48,6 +48,8 @@ namespace MT.Core.Services
         /// <returns>return Tenant object</returns>
         public TTenant AddTenant(TTenant tenant)
         {
+            var encryptPassword = EncryptionHelper.Encrypt(tenant.Password, tenant.ConcurencyStamp);
+            tenant.Password = encryptPassword;
             _context.Tenants.Add(tenant);
             _context.SaveChanges();
             return tenant;

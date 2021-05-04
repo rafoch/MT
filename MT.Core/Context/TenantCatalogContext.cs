@@ -12,8 +12,8 @@ namespace MT.Core.Context
         }
     }
 
-    public class TenantCatalogContext<TUser, TKey> : DbContext
-        where TUser : Tenant<TKey>
+    public class TenantCatalogContext<TTenant, TKey> : DbContext
+        where TTenant : Tenant<TKey>
         where TKey : IEquatable<TKey>
     {
         public TenantCatalogContext(DbContextOptions options)
@@ -24,14 +24,14 @@ namespace MT.Core.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TUser>(builder =>
+            modelBuilder.Entity<TTenant>(builder =>
             {
                 builder.HasKey(user => user.Id);
             });
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<TUser> Tenants { get; set; }
+        public DbSet<TTenant> Tenants { get; set; }
     }
 
 }
