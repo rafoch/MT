@@ -39,7 +39,7 @@ namespace MT.Core.Context
             _provider = provider;
         }
 
-        public TenantContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TTenant, TKey> provider)
+        protected TenantContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TTenant, TKey> provider)
         {
             _connectionStringBuilder = connectionStringBuilder;
             _provider = provider;

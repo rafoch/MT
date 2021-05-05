@@ -18,17 +18,20 @@ namespace MT.Web.Example
         private readonly TenantManager<TenantCatalog, Guid> _manager;
         private readonly ITenantProvider<TenantCatalog, Guid> _provider;
         private readonly ITenantContextFactory<TenantObjectContext> _contextFactory;
+        private readonly ITenantContextFactory<TenantObjectTwoContext> _contextFactory2;
 
         public LolzController(
             TenantCatalogContext catalogContext,
             TenantManager<TenantCatalog, Guid> manager,
             ITenantProvider<TenantCatalog, Guid> provider,
-            ITenantContextFactory<TenantObjectContext> contextFactory)
+            ITenantContextFactory<TenantObjectContext> contextFactory,
+            ITenantContextFactory<TenantObjectTwoContext> contextFactory2)
         {
             _catalogContext = catalogContext;
             _manager = manager;
             _provider = provider;
             _contextFactory = contextFactory;
+            _contextFactory2 = contextFactory2;
         }
 
         [HttpPost]
@@ -67,6 +70,31 @@ namespace MT.Web.Example
                 TenantId = tenantId
             };
             tenantContext.TenantObject.Add(entity);
+            tenantContext.SaveChanges();
+            return Ok(entity);
+        }
+
+        [HttpGet]
+        [Route("A2")]
+        public IActionResult Context2([FromQuery] Guid tenantId)
+        {
+            _provider.Set(tenantId);
+            var tenantObject = _contextFactory2.Create();
+            var first = tenantObject.TenantObjectTwos.ToList();
+            return Ok(first);
+        }
+
+        [HttpGet]
+        [Route("B2")]
+        public IActionResult ContextAdd2([FromQuery] Guid tenantId)
+        {
+            _provider.Set(tenantId);
+            var tenantContext = _contextFactory2.Create();
+            var entity = new TenantObjectTwo()
+            {
+                TenantId = tenantId
+            };
+            tenantContext.TenantObjectTwos.Add(entity);
             tenantContext.SaveChanges();
             return Ok(entity);
         }

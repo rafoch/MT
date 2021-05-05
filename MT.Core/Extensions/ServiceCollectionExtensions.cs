@@ -24,7 +24,8 @@ namespace MT.Core.Extensions
             where TTenant : Tenant<TKey>
             where TKey : IEquatable<TKey>
         {
-            return new MultiTenancyBuilder(typeof(TTenant), typeof(TKey), service);
+            var tTenancyType = typeof(ITenancy<TKey>);
+            return new MultiTenancyBuilder(typeof(TTenant), typeof(TKey), tTenancyType, service);
         }
 
         public static MultiTenancyBuilder AddMultiTenancy<TTenant, ITenancy, TKey>(

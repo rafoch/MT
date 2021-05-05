@@ -1,11 +1,10 @@
 using System;
 using FluentAssertions;
-using MT.Core.Model;
 using Xunit;
 
 namespace MT.Core.UnitTests
 {
-    public class ObjectShouldImplementAbstractClass
+    public class ObjectShouldImplementAbstractClass : BaseTestClass
     {
         [Fact]
         public void ObjectShouldImplementTenantClassWithTypedId()
@@ -27,12 +26,5 @@ namespace MT.Core.UnitTests
             typeAttributes.Length.Should().Be(2);
         }
 
-        private class TestTenantCatalogClass : Tenant<Guid>
-        {
-        }
-
-        private class TestTenancyClass : ITenancy<Guid>
-        {
-        }
     }
 }

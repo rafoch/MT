@@ -23,11 +23,18 @@ namespace MT.Core.Model
             Services = services;
         }
 
-        public MultiTenancyBuilder(Type tTenantType, Type tKeyType, IServiceCollection services) : this(tTenantType, services)
-            => this.TKeyType = tKeyType;
+        public MultiTenancyBuilder(Type tTenantType, Type tKeyType, IServiceCollection services) 
+            : this(tTenantType, services)
+        {
+            this.TKeyType = tKeyType;
+            AddTenantProvider();
+        }
 
-        public MultiTenancyBuilder(Type tTenantType, Type tKeyType, Type tTenancyType, IServiceCollection services) : this(tTenantType, tKeyType, services)
-            => ITenancyType = tTenancyType;
+        public MultiTenancyBuilder(Type tTenantType, Type tKeyType, Type tTenancyType, IServiceCollection services) :
+            this(tTenantType, tKeyType, services)
+        {
+            ITenancyType = tTenancyType;
+        }
 
         /// <summary>
         /// Gets the <see cref="Type"/> used catalog.
@@ -75,7 +82,7 @@ namespace MT.Core.Model
         /// </summary>
         /// <typeparam name="TTenantCatalogContext"></typeparam>
         /// <param name="optionsAction">database options builder</param>
-        /// <returns></returns>
+        /// <returns><see cref="MultiTenancyBuilder"/></returns>
         public virtual MultiTenancyBuilder AddTenantCatalogContext<TTenantCatalogContext>(Action<DbContextOptionsBuilder> optionsAction)
             where TTenantCatalogContext : DbContext
         {
@@ -87,15 +94,20 @@ namespace MT.Core.Model
             return AddScoped(userManagerType, customType);
         }
 
+        /// <summary>
+        /// Register in IoC <see cref="TTenantContext"/> with <see cref="ITenantContextFactory{TContext}"/>
+        /// </summary>
+        /// <typeparam name="TTenantContext">DbContext that inherits from <see cref="TenantContext"/></typeparam>
+        /// <param name="optiAction"><see cref="DbContextOptionsBuilder"/></param>
+        /// <returns><see cref="MultiTenancyBuilder"/></returns>
         public virtual MultiTenancyBuilder AddTenantContext<TTenantContext>(Action<DbContextOptionsBuilder> optiAction)
             where TTenantContext : DbContext
         {
             AddDbContextOptionsBuilder<TTenantContext>((provider, builder) => optiAction(builder));
             var userManagerType = typeof(TenantContext<,>).MakeGenericType(TTenantTypeType, TKeyType);
             var customType = typeof(TTenantContext);
-            AddTenantProvider();
-            AddTenantFactory(userManagerType, customType);
             Services.AddDbContext<TTenantContext>(optiAction);
+            AddTenantFactory(userManagerType, customType);
             return AddScoped(userManagerType, customType);
         }
 
@@ -157,15 +169,6 @@ namespace MT.Core.Model
             optionsAction?.Invoke(applicationServiceProvider, builder);
 
             return builder.Options;
-        }
-
-        /// <summary>
-        /// Migrate all tenants databases to the current migrations on application startup
-        /// </summary>
-        /// <returns><see cref="MultiTenancyBuilder"/> object</returns>
-        public MultiTenancyBuilder MigrateTenantContexts()
-        {
-            return this;
         }
     }
 }

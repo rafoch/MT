@@ -25,7 +25,7 @@ namespace MT.Core.Extensions
             where TTenant : Tenant<TKey>
             where TKey : IEquatable<TKey>
         {
-            var keys = new List<TKey>();
+            List<TKey> keys;
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var tenantCatalogContext = serviceScope.ServiceProvider.GetService<TenantCatalogContext<TTenant, TKey>>();

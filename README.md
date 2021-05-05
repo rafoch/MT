@@ -11,10 +11,19 @@ a lightway package to manage and implement multi tenant architecture to your .NE
 ```csharp
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMultiTenancy<TenantCatalog, TenantObject, Guid>()
-                .AddTenantCatalogContext<TenantCatalogContext>(builder => builder.UseSqlServer("dsa"))
-                .AddTenantContext<TenantObjectContext>()
-                .MigrateTenantContexts();
+            services.AddMultiTenancy<TenantCatalog, Guid>()
+                .AddTenantCatalogContext<TenantCatalogContext>(builder => builder.UseSqlServer("<Your connection string>"))
+                .AddTenantContext<TenantObjectContext>();
+        }
+```
+
+```csharp
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            // Creates middleware that search for tenant-id in Header for each request and set it's to TenantProvider
+            app.UseMultiTenancy<TenantCatalog, Guid>();
+            // Use this if you want to migrate all tenants databases specified in Catalog Database
+            app.MigrateTenantDatabases<TenantCatalog, Guid>(); 
         }
 ```
 

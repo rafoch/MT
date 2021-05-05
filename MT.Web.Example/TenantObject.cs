@@ -8,4 +8,9 @@ namespace MT.Web.Example
     {
         public string Name { get; set; }
     }
+
+    public class TenantObjectTwo : ITenancy<Guid>
+    {
+        public string Name { get; set; }
+    }
 }

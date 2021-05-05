@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MT.Core</name>
+    </assembly>
+    <members>
+        <member name="F:MT.Core.Constans.Constans.TenantIdHeaderKey">
+            <returns><value>tenant-id</value></returns>
+        </member>
+        <member name="M:MT.Core.Context.TenantContextFactory`4.Create">
+            <inheritdoc />
+        </member>
+        <member name="M:MT.Core.Context.TenantContextFactory`4.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:MT.Core.Context.ITenantContextFactory`1">
+            <inheritdoc />
+        </member>
+        <member name="M:MT.Core.Context.ITenantContextFactory`1.Create">
+            <summary>
+            Creates delivered <see cref="T:MT.Core.Context.TenantContext"/>
+            </summary>
+            <returns>Return context that inherits from <see cref="T:MT.Core.Context.TenantContext"/></returns>
+        </member>
+        <member name="T:MT.Core.Middlewares.TenantHttpMiddleware`2">
+            <summary>
+            Adds typical middleware that search in request Headers section for key <see cref="F:MT.Core.Constans.Constans.TenantIdHeaderKey"/>
+            and setting it into <see cref="T:MT.Core.Providers.ITenantProvider`2"/>
+            </summary>
+            <typeparam name="TTenant">An object that implements <see cref="T:MT.Core.Model.Tenant`1"/> type</typeparam>
+            <typeparam name="TKey">An <see cref="T:MT.Core.Model.Tenant`1"/> identifier type</typeparam>
+        </member>
+        <member name="M:MT.Core.Model.MultiTenancyBuilder.#ctor(System.Type,Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Creates a new instance of <see cref="T:MT.Core.Model.MultiTenancyBuilder"/>.
+            </summary>
+            <param name="tTenantType">The <see cref="T:System.Type"/> to use for the tTenantType catalog.</param>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to attach to.</param>
+        </member>
+        <member name="P:MT.Core.Model.MultiTenancyBuilder.TTenantTypeType">
+            <summary>
+            Gets the <see cref="T:System.Type"/> used catalog.
+            </summary>
+            <value>
+            The <see cref="T:System.Type"/> used for catalog.
+            </value>
+        </member>
+        <member name="P:MT.Core.Model.MultiTenancyBuilder.TKeyType">
+            <summary>
+            Gets the <see cref="T:System.Type"/> used for tTenantType id type.
+            </summary>
+            <value>
+            The <see cref="T:System.Type"/> used for tTenantType id type.
+            </value>
+        </member>
+        <member name="P:MT.Core.Model.MultiTenancyBuilder.ITenancyType">
+            <summary>
+            Gets the <see cref="T:System.Type"/> used for tTenantType type.
+            </summary>
+            <value>
+            The <see cref="T:System.Type"/> used for tTenantType type.
+            </value>
+        </member>
+        <member name="P:MT.Core.Model.MultiTenancyBuilder.Services">
+            <summary>
+            Gets the <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> services are attached to.
+            </summary>
+            <value>
+            The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> services are attached to.
+            </value>
+        </member>
+        <member name="M:MT.Core.Model.MultiTenancyBuilder.AddTenantCatalogContext``1(System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder})">
+            <summary>
+            Creates an new instance of Tenant Catalog Context where the informations about tenants are stored.
+            </summary>
+            <typeparam name="TTenantCatalogContext"></typeparam>
+            <param name="optionsAction">database options builder</param>
+            <returns><see cref="T:MT.Core.Model.MultiTenancyBuilder"/></returns>
+        </member>
+        <member name="M:MT.Core.Model.MultiTenancyBuilder.AddTenantContext``1(System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder})">
+            <summary>
+            Register in IoC <see cref="!:TTenantContext"/> with <see cref="T:MT.Core.Context.ITenantContextFactory`1"/>
+            </summary>
+            <typeparam name="TTenantContext">DbContext that inherits from <see cref="T:MT.Core.Context.TenantContext"/></typeparam>
+            <param name="optiAction"><see cref="T:Microsoft.EntityFrameworkCore.DbContextOptionsBuilder"/></param>
+            <returns><see cref="T:MT.Core.Model.MultiTenancyBuilder"/></returns>
+        </member>
+        <member name="M:MT.Core.Providers.TenantProvider`2.Get">
+            <summary>
+            Gets tenant id 
+            </summary>
+            <returns>tenant id</returns>
+        </member>
+        <member name="M:MT.Core.Providers.TenantProvider`2.Set(`1)">
+            <summary>
+            Set tenant id
+            </summary>
+            <param name="key">tenant id</param>
+        </member>
+        <member name="M:MT.Core.Services.TenantManager`2.AddTenant(`0)">
+            <summary>
+            Register tenant in catalog database
+            </summary>
+            <param name="tenant">Object that implements <see cref="T:MT.Core.Model.Tenant`1"/> class</param>
+            <returns>return Tenant object</returns>
+        </member>
+        <member name="M:MT.Core.Services.TenantManager`2.AddTenantAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Register tenant in catalog database
+            </summary>
+            <param name="tenant">Object that implements <see cref="T:MT.Core.Model.Tenant`1"/> class</param>
+            <returns>return Tenant object</returns>
+        </member>
+        <member name="M:MT.Core.Services.TenantManager`2.RemoveTenant(`1)">
+            <summary>
+            Removes tenant with specified id from catalog database
+            </summary>
+            <param name="id">tenant id</param>
+        </member>
+        <member name="M:MT.Core.Services.TenantManager`2.RemoveTenant(`0)">
+            <summary>
+            Removes tenant from catalog database
+            </summary>
+            <param name="id">tenant object</param>
+        </member>
+        <member name="M:MT.Core.Services.TenantManager`2.RemoveTenantAsync(`1)">
+            <summary>
+            Removes tenant with specified id from catalog database
+            </summary>
+            <param name="id">tenant id</param>
+        </member>
+        <member name="M:MT.Core.Services.TenantManager`2.RemoveTenantAsync(`0)">
+            <summary>
+            Removes tenant from catalog database
+            </summary>
+            <param name="id">tenant object</param>
+        </member>
+        <member name="M:MT.Core.Services.TenantManager`2.Get(`1)">
+            <summary>
+            Gives a tenant object by specific id
+            </summary>
+            <param name="id">tenant id</param>
+            <returns>tenant object</returns>
+        </member>
+        <member name="M:MT.Core.Services.TenantManager`2.GetAsync(`1)">
+            <summary>
+            Gives a tenant object by specific id
+            </summary>
+            <param name="id">tenant id</param>
+            <returns>tenant object</returns>
+        </member>
+    </members>
+</doc>

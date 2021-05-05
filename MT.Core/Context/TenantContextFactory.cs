@@ -13,9 +13,10 @@ namespace MT.Core.Context
         where TKey : IEquatable<TKey>
         where TTenant : Tenant<TKey>
     {
-        private ITenantProvider<TTenant, TKey> _tenantProvider;
+        private readonly ITenantProvider<TTenant, TKey> _tenantProvider;
         private readonly TenantManager<TTenant, TKey> _tenantManager;
         private TContext _context;
+        
         public TenantContextFactory(
             ITenantProvider<TTenant, TKey> tenantProvider,
             TenantManager<TTenant, TKey> tenantManager)
@@ -24,6 +25,7 @@ namespace MT.Core.Context
             _tenantManager = tenantManager;
         }
 
+        /// <inheritdoc />
         public TContext Create()
         {
             var value = _tenantProvider.Get().ToString();
@@ -50,14 +52,20 @@ namespace MT.Core.Context
             return _context;
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             _context?.Dispose();
         }
     }
 
+    /// <inheritdoc />
     public interface ITenantContextFactory<out TContext> : IDisposable
     {
+        /// <summary>
+        /// Creates delivered <see cref="TenantContext"/>
+        /// </summary>
+        /// <returns>Return context that inherits from <see cref="TenantContext"/></returns>
         TContext Create();
     }
 }

@@ -28,4 +28,17 @@ namespace MT.Web.Example
             base.OnModelCreating(modelBuilder);
         }
     }
+
+    public class TenantObjectTwoContext : TenantContext<TenantCatalog, Guid>
+    {
+        public DbSet<TenantObjectTwo> TenantObjectTwos { get; set; }
+
+        public TenantObjectTwoContext(ITenantProvider<TenantCatalog, Guid> provider, DbContextOptions options) : base(provider, options)
+        {
+        }
+
+        public TenantObjectTwoContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TenantCatalog, Guid> provider) : base(connectionStringBuilder, provider)
+        {
+        }
+    }
 }
