@@ -1,6 +1,6 @@
 ![example workflow](https://github.com/rafoch/MT/actions/workflows/dotnet.yml/badge.svg)
-![Shields.io](https://img.shields.io/nuget/v/MultiTenancy.Core?color=dd&label=MultiTenancy.Core)
-![Shields.io](https://img.shields.io/nuget/dt/MultiTenancy.Core?label=downloads)
+[![Nuget](https://img.shields.io/nuget/v/Multitenancy.Core?color=green&label=Multitenancy.Core)](https://www.nuget.org/packages/MultiTenancy.Core/)
+[![Nuget](https://img.shields.io/nuget/dt/MultiTenancy.Core)](https://www.nuget.org/packages/MultiTenancy.Core/)
 # MultiTenancy
 a lightway package to manage and implement multi tenant architecture to your .NET Core Applications
 
