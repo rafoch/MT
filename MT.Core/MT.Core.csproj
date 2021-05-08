@@ -3,12 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.6</Version>
+        <Version>0.0.7</Version>
         <PackageId>MultiTenancy.Core</PackageId>
         <Product>MultiTenancy.Core</Product>
         <Authors>Rafał Ochotny</Authors>
         <Description>A lightway package to implement MultiTenancy architecture in your .NET Core Applications</Description>
-        <PackageReleaseNotes>- Fixed documentation on nuget</PackageReleaseNotes>
+        <PackageReleaseNotes>- Added more exception
+- Added validation on adding tenant via Tenant Manager</PackageReleaseNotes>
         <RepositoryUrl>https://github.com/rafoch/MT</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>Multitenancy;Database;Multi;Tenant</PackageTags>

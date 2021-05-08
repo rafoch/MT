@@ -8,11 +8,18 @@ namespace MT.Core.Exceptions
 
     public class TenantNotFoundException : Exception
     {
-
         public TenantNotFoundException(string tenantId)
             :base($"Tenant with id: {tenantId} does not exist")
         {
             
         }
+    }
+
+    public class TenantObjectIsMissingException : Exception
+    {
+    }
+
+    public class TenantDatabasePasswordIsMissingException : Exception
+    {
     }
 }

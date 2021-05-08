@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -46,8 +47,17 @@ namespace MT.Core.Services
         /// </summary>
         /// <param name="tenant">Object that implements <see cref="Tenant{TKey}"/> class</param>
         /// <returns>return Tenant object</returns>
-        public TTenant AddTenant(TTenant tenant)
+        public TTenant AddTenant([NotNull] TTenant tenant)
         {
+            if (tenant is null)
+            {
+                throw new TenantObjectIsMissingException();
+            }
+
+            if (string.IsNullOrWhiteSpace(tenant.Password))
+            {
+                throw new TenantDatabasePasswordIsMissingException();
+            }
             var encryptPassword = EncryptionHelper.Encrypt(tenant.Password, tenant.ConcurencyStamp);
             tenant.Password = encryptPassword;
             _context.Tenants.Add(tenant);
@@ -60,8 +70,18 @@ namespace MT.Core.Services
         /// </summary>
         /// <param name="tenant">Object that implements <see cref="Tenant{TKey}"/> class</param>
         /// <returns>return Tenant object</returns>
-        public async Task<TTenant> AddTenantAsync(TTenant tenant, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<TTenant> AddTenantAsync([NotNull] TTenant tenant, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (tenant is null)
+            {
+                throw new TenantObjectIsMissingException();
+            }
+
+            if (string.IsNullOrWhiteSpace(tenant.Password))
+            {
+                throw new TenantDatabasePasswordIsMissingException();
+            }
+
             var encryptPassword = EncryptionHelper.Encrypt(tenant.Password, tenant.ConcurencyStamp);
             tenant.Password = encryptPassword;
             await _context.Tenants.AddAsync(tenant, cancellationToken);
