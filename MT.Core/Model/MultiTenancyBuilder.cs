@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using MT.Core.Context;
 using MT.Core.Providers;
 using MT.Core.Services;
+using MT.Core.Validators;
 
 namespace MT.Core.Model
 {
@@ -100,8 +101,16 @@ namespace MT.Core.Model
             var userManagerType = typeof(TenantCatalogDbContext<,>).MakeGenericType(TenantType, KeyType);
             var customType = typeof(TTenantCatalogContext);
             Services.AddDbContext<TTenantCatalogContext>(optionsAction);
+            AddTenantValidator();
             AddTenantManager();
             return AddScoped(userManagerType, customType);
+        }
+
+        private MultiTenancyBuilder AddTenantValidator()
+        {
+            var userManagerType = typeof(TenantValidator<,>).MakeGenericType(TenantType, KeyType);
+            Services.AddScoped(userManagerType);
+            return this;
         }
 
         /// <summary>

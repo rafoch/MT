@@ -3,19 +3,20 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.7</Version>
+        <Version>0.0.8</Version>
         <PackageId>MultiTenancy.Core</PackageId>
         <Product>MultiTenancy.Core</Product>
         <Authors>Rafał Ochotny</Authors>
         <Description>A lightway package to implement MultiTenancy architecture in your .NET Core Applications</Description>
-        <PackageReleaseNotes>- Added more exception
-- Added validation on adding tenant via Tenant Manager</PackageReleaseNotes>
+        <PackageReleaseNotes>- Now every method has a comment !
+- Added validation on adding tenant into database</PackageReleaseNotes>
         <RepositoryUrl>https://github.com/rafoch/MT</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>Multitenancy;Database;Multi;Tenant</PackageTags>
+        <PackageTags>Multitenancy;Database;Multi;Tenant;DbContext;Database;Context;Architecture;MultiTenant;Core;Entity;EntityFramework;Framework</PackageTags>
         <Copyright></Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageLicenseFile></PackageLicenseFile>
+        <LangVersion>latest</LangVersion>
 
 
     </PropertyGroup>
@@ -32,5 +33,4 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
         <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     </ItemGroup>
-
 </Project>

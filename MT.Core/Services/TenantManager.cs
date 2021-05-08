@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ using MT.Core.Context;
 using MT.Core.Exceptions;
 using MT.Core.Extensions;
 using MT.Core.Model;
+using MT.Core.Validators;
 
 namespace MT.Core.Services
 {
@@ -19,7 +21,10 @@ namespace MT.Core.Services
     public class TenantManager : TenantManager<Tenant, string>
     {
         /// <inheritdoc />
-        public TenantManager(TenantCatalogDbContext<Tenant, string> dbContext) : base(dbContext)
+        public TenantManager(
+            TenantCatalogDbContext<Tenant, string> dbContext,
+            TenantValidator<Tenant, string> validator) 
+            : base(dbContext, validator)
         {
         }
     }
@@ -29,7 +34,10 @@ namespace MT.Core.Services
         where TTenant : Tenant<string>
     {
         /// <inheritdoc />
-        public TenantManager(TenantCatalogDbContext<TTenant, string> dbContext) : base(dbContext)
+        public TenantManager(
+            TenantCatalogDbContext<TTenant, string> dbContext,
+            TenantValidator<TTenant, string> validator) 
+            : base(dbContext, validator)
         {
         }
     }
@@ -44,15 +52,19 @@ namespace MT.Core.Services
         where TKey : IEquatable<TKey>
     {
         private readonly TenantCatalogDbContext<TTenant, TKey> _dbContext;
+        private readonly TenantValidator<TTenant, TKey> _validator;
 
         /// <summary>
-        /// 
+        /// Creates new instance of <see cref="TenantManager{TTenant}"/>
         /// </summary>
-        /// <param name="dbContext"></param>
+        /// <param name="dbContext"><see cref="DbContext"/> that inherits from <see cref="TenantCatalogDbContext{TTenant,TKey}"/></param>
+        /// <param name="validator"><see cref="TenantValidator{TTenant,TKey}"/></param>
         public TenantManager(
-            TenantCatalogDbContext<TTenant, TKey> dbContext)
+            TenantCatalogDbContext<TTenant, TKey> dbContext,
+            TenantValidator<TTenant, TKey> validator)
         {
             _dbContext = dbContext;
+            _validator = validator;
         }
 
         /// <summary>
@@ -62,22 +74,17 @@ namespace MT.Core.Services
         /// <returns>Object that inherits from <see cref="Tenant{TKey}"/></returns>
         public TTenant AddTenant([NotNull] TTenant tenant)
         {
-            if (tenant is null)
-            {
-                throw new TenantObjectIsMissingException();
-            }
+            var validationResult = _validator.Validate(tenant);
 
-            if (string.IsNullOrWhiteSpace(tenant.Password))
-            {
-                throw new TenantDatabasePasswordIsMissingException();
-            }
+            ValidateResult(validationResult);
+                
             var encryptPassword = EncryptionHelper.Encrypt(tenant.Password, tenant.ConcurrencyStamp);
             tenant.Password = encryptPassword;
             _dbContext.Tenants.Add(tenant);
             _dbContext.SaveChanges();
             return tenant;
         }
-
+        
         /// <summary>
         /// Register tenant in <see cref="TenantCatalogDbContext{TTenant,TKey}.Tenants"/> 
         /// </summary>
@@ -86,6 +93,10 @@ namespace MT.Core.Services
         /// <returns>Object that inherits from <see cref="Tenant{TKey}"/></returns>
         public async Task<TTenant> AddTenantAsync([NotNull] TTenant tenant, CancellationToken cancellationToken = default(CancellationToken))
         {
+            var validationResult = _validator.Validate(tenant);
+
+            ValidateResult(validationResult);
+
             if (tenant is null)
             {
                 throw new TenantObjectIsMissingException();
@@ -171,6 +182,28 @@ namespace MT.Core.Services
             return rawPassword;
         }
 
+        private void ValidateResult(ValidationResult validationResult)
+        {
+            if (validationResult != ValidationResult.Success)
+            {
+                foreach (var validationResultMemberName in validationResult.MemberNames)
+                {
+                    switch (validationResultMemberName)
+                    {
+                        case nameof(Tenant<TKey>):
+                            throw new TenantObjectIsMissingException();
+                        case nameof(Tenant<TKey>.Password):
+                            throw new TenantDatabasePasswordIsMissingException();
+                        case nameof(Tenant<TKey>.Server):
+                            throw new TenantServerIsMissingException();
+                        case nameof(Tenant<TKey>.Database):
+                            throw new TenantServerDatabaseIsMissingException();
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
         private static class EncryptionHelper
         {
             internal static string Encrypt(string clearText, string key)

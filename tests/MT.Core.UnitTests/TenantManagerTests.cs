@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MT.Core.Context;
 using MT.Core.Exceptions;
 using MT.Core.Services;
+using MT.Core.Validators;
 using Xunit;
 
 namespace MT.Core.UnitTests
@@ -14,14 +15,18 @@ namespace MT.Core.UnitTests
 
         public TenantManagerTests()
         {
-            _manager = new TenantManager<TestTenantCatalogClass, Guid>(new TestTenantCatalogDbDbContextClass(new DbContextOptions<TestTenantCatalogDbDbContextClass>()));
+            _manager = new TenantManager<TestTenantCatalogClass, Guid>(
+                new TestTenantCatalogDbDbContextClass(new DbContextOptions<TestTenantCatalogDbDbContextClass>()),
+                new TenantValidator<TestTenantCatalogClass, Guid>());
         }
         [Fact]
         public void ShouldAddSynchronouslyTenantToDatabase()
         {
             var tenantCatalogClass = new TestTenantCatalogClass()
             {
-                Password = "test"
+                Password = "test",
+                Server = "test",
+                Database = "test"
             };
 
             var testTenantCatalogClass = _manager.AddTenant(tenantCatalogClass);
@@ -33,7 +38,9 @@ namespace MT.Core.UnitTests
         {
             var testTenantCatalogClass = new TestTenantCatalogClass()
             {
-                Password = "test"
+                Password = "test",
+                Server = "test",
+                Database = "test"
             };
             var addTenantAsync = await _manager.AddTenantAsync(testTenantCatalogClass);
             addTenantAsync.Should().NotBeNull();
