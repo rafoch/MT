@@ -21,6 +21,11 @@ namespace MT.Core.Middlewares
         private readonly RequestDelegate _next;
         private readonly ILogger<TenantHttpMiddleware<TTenant, TKey>> _logger;
 
+        /// <summary>
+        /// Creates new instance of <see cref="TenantHttpMiddleware{TTenant,TKey}"/>
+        /// </summary>
+        /// <param name="next"><see cref="RequestDelegate"/></param>
+        /// <param name="logger"><see cref="ILogger{TCategoryName}"/></param>
         public TenantHttpMiddleware(
             RequestDelegate next,
             ILogger<TenantHttpMiddleware<TTenant, TKey>> logger)
@@ -29,6 +34,12 @@ namespace MT.Core.Middlewares
             _logger = logger;
         }
 
+        /// <summary>
+        /// Sets <see cref="Tenant{TKey}.Id"/> value in <see cref="ITenantProvider{TTenant,TKey}.Set"/> method
+        /// </summary>
+        /// <param name="httpContext"><see cref="HttpContext"/></param>
+        /// <param name="provider"><see cref="ITenantProvider{TTenant,TKey}"/></param>
+        /// <returns></returns>
         public async Task Invoke(HttpContext httpContext, ITenantProvider<TTenant, TKey> provider)
         {
             var requestHeader = httpContext.Request.Headers[Constans.Constans.TenantIdHeaderKey];

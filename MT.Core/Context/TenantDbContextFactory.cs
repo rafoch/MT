@@ -7,9 +7,10 @@ using MT.Core.Services;
 
 namespace MT.Core.Context
 {
-    public class TenantContextFactory<TContext, TTenant, TTenancy,TKey> : ITenantContextFactory<TContext>
-        where TContext : TenantContext<TTenant, TKey> 
-        where TTenancy : ITenancy<TKey> 
+    /// <inheritdoc />
+    public class TenantDbContextFactory<TContext, TTenant, TTenancy,TKey> : ITenantDbContextFactory<TContext>
+        where TContext : TenantDbContext<TTenant, TKey> 
+        where TTenancy : Tenancy<TKey> 
         where TKey : IEquatable<TKey>
         where TTenant : Tenant<TKey>
     {
@@ -17,7 +18,12 @@ namespace MT.Core.Context
         private readonly TenantManager<TTenant, TKey> _tenantManager;
         private TContext _context;
         
-        public TenantContextFactory(
+        /// <summary>
+        /// Creates new instance of <see cref="TenantDbContextFactory{TContext,TTenant,TTenancy,TKey}"/>
+        /// </summary>
+        /// <param name="tenantProvider"><see cref="ITenantProvider{TTenant,TKey}"/></param>
+        /// <param name="tenantManager"><see cref="TenantManager{TTenant}"/></param>
+        public TenantDbContextFactory(
             ITenantProvider<TTenant, TKey> tenantProvider,
             TenantManager<TTenant, TKey> tenantManager)
         {
@@ -39,7 +45,7 @@ namespace MT.Core.Context
                 throw new TenantNotFoundException(_tenantProvider.Get().ToString());
             }
            
-            var password = _tenantManager.GetTenantPassword(tenant.Password, tenant.ConcurencyStamp);
+            var password = _tenantManager.GetTenantPassword(tenant.Password, tenant.ConcurrencyStamp);
             var connectionStringBuilder = new SqlConnectionStringBuilder
             {
                 DataSource = $"tcp:{tenant.Server},{tenant.Port}",
@@ -60,12 +66,12 @@ namespace MT.Core.Context
     }
 
     /// <inheritdoc />
-    public interface ITenantContextFactory<out TContext> : IDisposable
+    public interface ITenantDbContextFactory<out TContext> : IDisposable
     {
         /// <summary>
-        /// Creates delivered <see cref="TenantContext"/>
+        /// Creates delivered <see cref="TenantDbContext"/>
         /// </summary>
-        /// <returns>Return context that inherits from <see cref="TenantContext"/></returns>
+        /// <returns>Return dbContext that inherits from <see cref="TenantDbContext"/></returns>
         TContext Create();
     }
 }

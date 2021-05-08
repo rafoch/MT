@@ -4,12 +4,12 @@ using MT.Core.Model;
 
 namespace MT.Web.Example
 {
-    public class TenantObject : ITenancy<Guid>
+    public class TenantObject : Tenancy<Guid>
     {
         public string Name { get; set; }
     }
 
-    public class TenantObjectTwo : ITenancy<Guid>
+    public class TenantObjectTwo : Tenancy<Guid>
     {
         public string Name { get; set; }
     }

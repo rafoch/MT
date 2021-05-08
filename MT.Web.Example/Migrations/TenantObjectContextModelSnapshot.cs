@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MT.Web.Example.Migrations
 {
-    [DbContext(typeof(TenantObjectContext))]
+    [DbContext(typeof(TenantDbObjectContext))]
     partial class TenantObjectContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

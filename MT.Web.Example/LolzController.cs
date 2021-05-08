@@ -14,24 +14,24 @@ namespace MT.Web.Example
     [ApiController]
     public class LolzController : ControllerBase
     {
-        private readonly TenantCatalogContext _catalogContext;
+        private readonly ExampleTenantCatalogDbContext _catalogDbContext;
         private readonly TenantManager<TenantCatalog, Guid> _manager;
         private readonly ITenantProvider<TenantCatalog, Guid> _provider;
-        private readonly ITenantContextFactory<TenantObjectContext> _contextFactory;
-        private readonly ITenantContextFactory<TenantObjectTwoContext> _contextFactory2;
+        private readonly ITenantDbContextFactory<TenantDbObjectContext> _dbContextFactory;
+        private readonly ITenantDbContextFactory<TenantDbObjectTwoContext> _dbContextFactory2;
 
         public LolzController(
-            TenantCatalogContext catalogContext,
+            ExampleTenantCatalogDbContext catalogDbContext,
             TenantManager<TenantCatalog, Guid> manager,
             ITenantProvider<TenantCatalog, Guid> provider,
-            ITenantContextFactory<TenantObjectContext> contextFactory,
-            ITenantContextFactory<TenantObjectTwoContext> contextFactory2)
+            ITenantDbContextFactory<TenantDbObjectContext> dbContextFactory,
+            ITenantDbContextFactory<TenantDbObjectTwoContext> dbContextFactory2)
         {
-            _catalogContext = catalogContext;
+            _catalogDbContext = catalogDbContext;
             _manager = manager;
             _provider = provider;
-            _contextFactory = contextFactory;
-            _contextFactory2 = contextFactory2;
+            _dbContextFactory = dbContextFactory;
+            _dbContextFactory2 = dbContextFactory2;
         }
 
         [HttpPost]
@@ -45,7 +45,7 @@ namespace MT.Web.Example
         [Route("T")]
         public IActionResult T()
         {
-            var list = _catalogContext.Tenants.ToList();
+            var list = _catalogDbContext.Tenants.ToList();
             return Ok(list);
         }
 
@@ -54,7 +54,7 @@ namespace MT.Web.Example
         public IActionResult Context([FromQuery] Guid tenantId)
         {
             _provider.Set(tenantId);
-            var tenantObject = _contextFactory.Create();
+            var tenantObject = _dbContextFactory.Create();
             var first = tenantObject.TenantObject.ToList();
             return Ok(first);
         }
@@ -64,7 +64,7 @@ namespace MT.Web.Example
         public IActionResult ContextAdd([FromQuery] Guid tenantId)
         {
             _provider.Set(tenantId);
-            var tenantContext = _contextFactory.Create();
+            var tenantContext = _dbContextFactory.Create();
             var entity = new TenantObject
             {
                 TenantId = tenantId
@@ -79,7 +79,7 @@ namespace MT.Web.Example
         public IActionResult Context2([FromQuery] Guid tenantId)
         {
             _provider.Set(tenantId);
-            var tenantObject = _contextFactory2.Create();
+            var tenantObject = _dbContextFactory2.Create();
             var first = tenantObject.TenantObjectTwos.ToList();
             return Ok(first);
         }
@@ -89,7 +89,7 @@ namespace MT.Web.Example
         public IActionResult ContextAdd2([FromQuery] Guid tenantId)
         {
             _provider.Set(tenantId);
-            var tenantContext = _contextFactory2.Create();
+            var tenantContext = _dbContextFactory2.Create();
             var entity = new TenantObjectTwo()
             {
                 TenantId = tenantId

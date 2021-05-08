@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MT.Web.Example.Migrations
 {
-    [DbContext(typeof(TenantObjectContext))]
+    [DbContext(typeof(TenantDbObjectContext))]
     [Migration("20210430102509_InitMigration")]
     partial class InitMigration
     {

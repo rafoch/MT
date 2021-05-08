@@ -7,20 +7,20 @@
         <member name="F:MT.Core.Constans.Constans.TenantIdHeaderKey">
             <returns><value>tenant-id</value></returns>
         </member>
-        <member name="M:MT.Core.Context.TenantContextFactory`4.Create">
+        <member name="M:MT.Core.Context.TenantDbContextFactory`4.Create">
             <inheritdoc />
         </member>
-        <member name="M:MT.Core.Context.TenantContextFactory`4.Dispose">
+        <member name="M:MT.Core.Context.TenantDbContextFactory`4.Dispose">
             <inheritdoc />
         </member>
-        <member name="T:MT.Core.Context.ITenantContextFactory`1">
+        <member name="T:MT.Core.Context.ITenantDbContextFactory`1">
             <inheritdoc />
         </member>
-        <member name="M:MT.Core.Context.ITenantContextFactory`1.Create">
+        <member name="M:MT.Core.Context.ITenantDbContextFactory`1.Create">
             <summary>
-            Creates delivered <see cref="T:MT.Core.Context.TenantContext"/>
+            Creates delivered <see cref="T:MT.Core.Context.TenantDbContext"/>
             </summary>
-            <returns>Return context that inherits from <see cref="T:MT.Core.Context.TenantContext"/></returns>
+            <returns>Return dbContext that inherits from <see cref="T:MT.Core.Context.TenantDbContext"/></returns>
         </member>
         <member name="T:MT.Core.Middlewares.TenantHttpMiddleware`2">
             <summary>
@@ -34,7 +34,7 @@
             <summary>
             Creates a new instance of <see cref="T:MT.Core.Model.MultiTenancyBuilder"/>.
             </summary>
-            <param name="tTenantType">The <see cref="T:System.Type"/> to use for the tTenantType catalog.</param>
+            <param name="tenantType">The <see cref="T:System.Type"/> to use for the tenantType catalog.</param>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to attach to.</param>
         </member>
         <member name="P:MT.Core.Model.MultiTenancyBuilder.TTenantTypeType">
@@ -47,18 +47,18 @@
         </member>
         <member name="P:MT.Core.Model.MultiTenancyBuilder.TKeyType">
             <summary>
-            Gets the <see cref="T:System.Type"/> used for tTenantType id type.
+            Gets the <see cref="T:System.Type"/> used for tenantType id type.
             </summary>
             <value>
-            The <see cref="T:System.Type"/> used for tTenantType id type.
+            The <see cref="T:System.Type"/> used for tenantType id type.
             </value>
         </member>
         <member name="P:MT.Core.Model.MultiTenancyBuilder.ITenancyType">
             <summary>
-            Gets the <see cref="T:System.Type"/> used for tTenantType type.
+            Gets the <see cref="T:System.Type"/> used for tenantType type.
             </summary>
             <value>
-            The <see cref="T:System.Type"/> used for tTenantType type.
+            The <see cref="T:System.Type"/> used for tenantType type.
             </value>
         </member>
         <member name="P:MT.Core.Model.MultiTenancyBuilder.Services">
@@ -79,9 +79,9 @@
         </member>
         <member name="M:MT.Core.Model.MultiTenancyBuilder.AddTenantContext``1(System.Action{Microsoft.EntityFrameworkCore.DbContextOptionsBuilder})">
             <summary>
-            Register in IoC <see cref="!:TTenantContext"/> with <see cref="T:MT.Core.Context.ITenantContextFactory`1"/>
+            Register in IoC <see cref="!:TTenantContext"/> with <see cref="T:MT.Core.Context.ITenantDbContextFactory`1"/>
             </summary>
-            <typeparam name="TTenantContext">DbContext that inherits from <see cref="T:MT.Core.Context.TenantContext"/></typeparam>
+            <typeparam name="TTenantContext">DbContext that inherits from <see cref="T:MT.Core.Context.TenantDbContext"/></typeparam>
             <param name="optiAction"><see cref="T:Microsoft.EntityFrameworkCore.DbContextOptionsBuilder"/></param>
             <returns><see cref="T:MT.Core.Model.MultiTenancyBuilder"/></returns>
         </member>

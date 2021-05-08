@@ -12,8 +12,17 @@ using MT.Core.Providers;
 
 namespace MT.Core.Extensions
 {
-    public static class IApplicationBuilderExtensions
+    /// <summary>
+    /// Provides extension methods for <see cref="IApplicationBuilder"/>
+    /// </summary>
+    public static class ApplicationBuilderExtensions
     {
+        /// <summary>
+        /// Adds <see cref="TenantHttpMiddleware{TTenant,TKey}"/> to application
+        /// </summary>
+        /// <typeparam name="TTenant"><see cref="Tenant{TKey}"/></typeparam>
+        /// <typeparam name="TKey"><see cref="Tenant{TKey}.Id"/></typeparam>
+        /// <param name="builder"><see cref="IApplicationBuilder"/></param>
         public static void UseMultiTenancy<TTenant, TKey>(this IApplicationBuilder builder)
         where TTenant : Tenant<TKey> 
         where TKey : IEquatable<TKey>
@@ -21,54 +30,89 @@ namespace MT.Core.Extensions
             builder.UseMiddleware<TenantHttpMiddleware<TTenant,TKey>>();
         }
 
-        public static void MigrateTenantDatabases<TTenant, TKey>(this IApplicationBuilder app)
+        /// <summary>
+        /// Migrates every tenant database stored in <see cref="TenantCatalogDbContext{TTenant,TKey}.Tenants"/> table on application startup
+        /// </summary>
+        /// <typeparam name="TTenant"><see cref="Tenant{TKey}"/></typeparam>
+        /// <typeparam name="TKey"><see cref="Tenant{TKey}.Id"/></typeparam>
+        /// <param name="builder"><see cref="IApplicationBuilder"/></param>
+        public static void MigrateTenantDatabases<TTenant, TKey>(this IApplicationBuilder builder)
             where TTenant : Tenant<TKey>
             where TKey : IEquatable<TKey>
         {
-            List<TKey> keys;
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            List<TKey> keys = null;
+            using (var serviceScope = builder.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope())
             {
-                var tenantCatalogContext = serviceScope.ServiceProvider.GetService<TenantCatalogContext<TTenant, TKey>>();
-                keys = tenantCatalogContext.Tenants.Select(tenant => tenant.Id).ToList();
+                var tenantCatalogContext = serviceScope?.ServiceProvider.GetService<TenantCatalogDbContext<TTenant, TKey>>();
+                if (tenantCatalogContext != null)
+                {
+                    keys = tenantCatalogContext.Tenants.Select(tenant => tenant.Id).ToList();
+                }
+            }
+
+            if (keys == null)
+            {
+                return;
             }
 
             foreach (var key in keys)
             {
-                MigrateTenantContext<TTenant, TKey>(app, key);
+                MigrateTenantContext<TTenant, TKey>(builder, key);
             }
         }
 
+        /// <summary>
+        /// Creates dbContext to tenant database and migrate it during application startup 
+        /// </summary>
+        /// <typeparam name="TTenant"><see cref="Tenant{TKey}"/></typeparam>
+        /// <typeparam name="TKey"><see cref="Tenant{TKey}.Id"/></typeparam>
+        /// <param name="app"><see cref="IApplicationBuilder"/></param>
+        /// <param name="key"><see cref="Tenant{TKey}.Id"/></param>
         private static void MigrateTenantContext<TTenant, TKey>(
             IApplicationBuilder app, 
             TKey key) 
             where TTenant : Tenant<TKey>
             where TKey : IEquatable<TKey>
         {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope())
             {
-                var provider = serviceScope.ServiceProvider.GetService<ITenantProvider<TTenant, TKey>>();
-                provider.Set(key);
-                var enumerable = serviceScope.ServiceProvider.GetServices(typeof(TenantContext<TTenant, TKey>));
-                foreach (var tenancyContext in enumerable)
+                if (serviceScope != null)
                 {
-                    var makeGenericType = typeof(ITenantContextFactory<>).MakeGenericType(tenancyContext.GetType());
-                    var service =
-                        GetService<TTenant, TKey>(serviceScope, makeGenericType) as ITenantContextFactory<DbContext>;
-
-                    var database = service.Create().Database;
-                    if (database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" && database.CanConnect())
-                    {
-                        database.Migrate();
-                    }
+                    var provider = serviceScope.ServiceProvider.GetService<ITenantProvider<TTenant, TKey>>();
+                    provider?.Set(key);
                 }
+
+                var enumerable = serviceScope?.ServiceProvider.GetServices(typeof(TenantDbContext<TTenant, TKey>));
+                if (enumerable != null)
+                    foreach (var tenancyContext in enumerable)
+                    {
+                        var makeGenericType = typeof(ITenantDbContextFactory<>).MakeGenericType(tenancyContext?.GetType()!);
+                        var service = GetService<TTenant, TKey>(serviceScope, makeGenericType) as ITenantDbContextFactory<DbContext>;
+
+                        var database = service?.Create().Database;
+                        if (database != null && 
+                            database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" && 
+                            database.CanConnect())
+                        {
+                            database.Migrate();
+                        }
+                    }
             }
         }
 
-        private static object GetService<TTenant, TKey>(IServiceScope serviceScope, Type makeGenericType) 
+        /// <summary>
+        /// Gets service by type
+        /// </summary>
+        /// <typeparam name="TTenant"><see cref="Tenant{TKey}"/></typeparam>
+        /// <typeparam name="TKey"><see cref="Tenant{TKey}.Id"/></typeparam>
+        /// <param name="serviceScope"><see cref="IServiceScope"/></param>
+        /// <param name="serviceType"><see cref="Type"/></param>
+        /// <returns></returns>
+        private static object GetService<TTenant, TKey>(IServiceScope serviceScope, Type serviceType) 
             where TTenant : Tenant<TKey> 
             where TKey : IEquatable<TKey>
         {
-            return serviceScope.ServiceProvider.GetService(makeGenericType);
+            return serviceScope.ServiceProvider.GetService(serviceType);
         }
     }
 }

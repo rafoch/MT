@@ -11,13 +11,13 @@ namespace MT.Core.UnitTests
         {
         }
 
-        protected class TestTenancyClass : ITenancy<Guid>
+        protected class TestTenancyClass : Tenancy<Guid>
         {
         }
 
-        protected class TestTenantCatalogDbContextClass : TenantCatalogContext<TestTenantCatalogClass, Guid>
+        protected class TestTenantCatalogDbDbContextClass : TenantCatalogDbContext<TestTenantCatalogClass, Guid>
         {
-            public TestTenantCatalogDbContextClass(DbContextOptions options) : base(options)
+            public TestTenantCatalogDbDbContextClass(DbContextOptions options) : base(options)
             {
             }
 

@@ -9,69 +9,78 @@ using SqlConnectionStringBuilder = System.Data.SqlClient.SqlConnectionStringBuil
 
 namespace MT.Core.Context
 {
-    public class TenantContext : TenantContext<Tenant<string>, string>
+    /// <inheritdoc />
+    public class TenantDbContext : TenantDbContext<Tenant<string>, string>
     {
-        public TenantContext(
+        /// <inheritdoc />
+        public TenantDbContext(
             ITenantProvider<Tenant<string>, string> provider,
             DbContextOptions options)
             : base(provider, options)
         {
         }
 
-        public TenantContext(
+        /// <inheritdoc />
+        public TenantDbContext(
             DbContextOptions options)
             : base(options)
         {
         }
     }
 
-    public class TenantContext<TTenant, TKey> : DbContext
+    /// <inheritdoc />
+    public class TenantDbContext<TTenant, TKey> : DbContext
         where TTenant : Tenant<TKey>
         where TKey : IEquatable<TKey>
     {
         private readonly SqlConnectionStringBuilder _connectionStringBuilder;
         private readonly ITenantProvider<TTenant, TKey> _provider;
 
-        public TenantContext(ITenantProvider<TTenant, TKey> provider,
+        /// <inheritdoc />
+        public TenantDbContext(ITenantProvider<TTenant, TKey> provider,
             DbContextOptions options)
             : base(options)
         {
             _provider = provider;
         }
 
-        protected TenantContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TTenant, TKey> provider)
+        /// <inheritdoc />
+        protected TenantDbContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TTenant, TKey> provider)
         {
             _connectionStringBuilder = connectionStringBuilder;
             _provider = provider;
         }
 
-        protected TenantContext(DbContextOptions connectionStringBuilder)
+        /// <inheritdoc />
+        protected TenantDbContext(DbContextOptions connectionStringBuilder)
         {
         }
 
+        /// <inheritdoc />
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (_connectionStringBuilder != null)
             {
                 var sqlConnection = new SqlConnection(_connectionStringBuilder.ConnectionString.Replace(@"""", ""));
-                optionsBuilder.UseSqlServer(sqlConnection);
+                optionsBuilder.UseSqlServer(sqlConnection.ConnectionString);
             }
 
             base.OnConfiguring(optionsBuilder);
         }
 
+        /// <inheritdoc />
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var entityTypes = modelBuilder.Model.GetEntityTypes().Select(t => t.ClrType).ToList();
             foreach (var entityType in entityTypes)
             {
-                ConfigureTenantEntity<ITenancy<TKey>>(modelBuilder, entityType);
+                ConfigureTenantEntity<Tenancy<TKey>>(modelBuilder, entityType);
             }
             base.OnModelCreating(modelBuilder);
         }
 
         private void ConfigureTenantEntity<TEntity>(ModelBuilder modelBuilder, Type entityType)
-            where TEntity : ITenancy<TKey>
+            where TEntity : Tenancy<TKey>
         {
             modelBuilder.Entity<TEntity>(builder =>
             {

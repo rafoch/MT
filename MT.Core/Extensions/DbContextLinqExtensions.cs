@@ -5,9 +5,10 @@ using System.Reflection;
 
 namespace MT.Core.Extensions
 {
-    public static class DbContextLinqExtensions
+    internal static class DbContextLinqExtensions
     {
-        public static IQueryable<TEntity> Filter<TEntity, TProperty>(this IQueryable<TEntity> dbSet,
+        internal static IQueryable<TEntity> Filter<TEntity, TProperty>(
+            this IQueryable<TEntity> dbSet,
             Expression<Func<TEntity, TProperty>> property,
             TProperty value)
         {
@@ -15,7 +16,7 @@ namespace MT.Core.Extensions
             var memberExpression = property.Body as MemberExpression;
             if (memberExpression == null || !(memberExpression.Member is PropertyInfo))
             {
-                throw new ArgumentException("Property expected", "property");
+                throw new ArgumentException("Property expected", property.ToString());
             }
 
             Expression left = property.Body;

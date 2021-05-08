@@ -6,14 +6,15 @@ using MT.Core.Providers;
 
 namespace MT.Web.Example
 {
-    public class TenantObjectContext : TenantContext<TenantCatalog, Guid>
+    public class TenantDbObjectContext : TenantDbContext<TenantCatalog, Guid>
     {
-        public TenantObjectContext(ITenantProvider<TenantCatalog, Guid> provider,
-            DbContextOptions<TenantObjectContext> options) : base(provider, options)
+        public TenantDbObjectContext(
+            ITenantProvider<TenantCatalog, Guid> provider,
+            DbContextOptions<TenantDbObjectContext> options) : base(provider, options)
         {
         }
 
-        public TenantObjectContext(
+        public TenantDbObjectContext(
             SqlConnectionStringBuilder connectionStringBuilder, 
             ITenantProvider<TenantCatalog, Guid> provider) 
             : base(connectionStringBuilder, provider)
@@ -29,15 +30,15 @@ namespace MT.Web.Example
         }
     }
 
-    public class TenantObjectTwoContext : TenantContext<TenantCatalog, Guid>
+    public class TenantDbObjectTwoContext : TenantDbContext<TenantCatalog, Guid>
     {
         public DbSet<TenantObjectTwo> TenantObjectTwos { get; set; }
 
-        public TenantObjectTwoContext(ITenantProvider<TenantCatalog, Guid> provider, DbContextOptions options) : base(provider, options)
+        public TenantDbObjectTwoContext(ITenantProvider<TenantCatalog, Guid> provider, DbContextOptions options) : base(provider, options)
         {
         }
 
-        public TenantObjectTwoContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TenantCatalog, Guid> provider) : base(connectionStringBuilder, provider)
+        public TenantDbObjectTwoContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TenantCatalog, Guid> provider) : base(connectionStringBuilder, provider)
         {
         }
     }

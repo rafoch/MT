@@ -3,7 +3,7 @@
 namespace MT.Core.Exceptions
 {
     /// <inheritdoc />
-    public class TenantNotProvidedException : Exception
+    public class TenantDatabasePasswordIsMissingException : Exception
     {
     }
 }

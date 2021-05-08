@@ -30,9 +30,9 @@ a lightway package to manage and implement multi tenant architecture to your .NE
 ## Create Tenant Catalog object context
 
 ```csharp
-    public class TenantCatalogContext : TenantCatalogContext<TenantCatalog, Guid>
+    public class ExampleTenantCatalogDbContext : TenantCatalogDbContext<TenantCatalog, Guid>
     {
-        public TenantCatalogContext(DbContextOptions<TenantCatalogContext> options) : base(options)
+        public ExampleTenantCatalogDbContext(DbContextOptions<ExampleTenantCatalogDbContext> options) : base(options)
         {
         }
     }
@@ -42,7 +42,7 @@ a lightway package to manage and implement multi tenant architecture to your .NE
 We need to create our context that will be used across the application for retrivng and inserting data for various clients.
 > :warning: **It's important to implement DbContext with two constructors** - One is for migrations and second is for using the application
 ```csharp
-    public class TenantObjectContext : TenantContext<TenantObject, Guid>
+    public class TenantObjectContext : TenantDbContext<TenantCatalog, Guid>
     {
         public TenantObjectContext(ITenantProvider<TenantObject, Guid> provider,
             DbContextOptions<TenantObjectContext> options) : base(provider, options)
@@ -66,7 +66,7 @@ We need to create our context that will be used across the application for retri
 ```
 ## Create tenant object 
 ```csharp
-    public class TenantObject : ITenancy<Guid>
+    public class TenantObject : Tenancy<Guid>
     {
     }
 ```

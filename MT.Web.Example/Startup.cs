@@ -15,13 +15,13 @@ namespace MT.Web.Example
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<TenantObjectContext>(builder =>
+            services.AddDbContext<TenantDbObjectContext>(builder =>
                 builder.UseSqlServer(
                     "Server=JMB-DK-07\\PUKACZ,6024;Database=MT;User Id=tenant;Password=tenant1234567;"));
             services.AddMultiTenancy<TenantCatalog, Guid>()
-                .AddTenantCatalogContext<TenantCatalogContext>(builder => builder.UseInMemoryDatabase("dsa"))
-                .AddTenantContext<TenantObjectContext>(builder => builder.UseInMemoryDatabase("dsa"))
-                .AddTenantContext<TenantObjectTwoContext>(builder => builder.UseInMemoryDatabase("dsa"));
+                .AddTenantCatalogContext<ExampleTenantCatalogDbContext>(builder => builder.UseInMemoryDatabase("dsa"))
+                .AddTenantContext<TenantDbObjectContext>(builder => builder.UseInMemoryDatabase("dsa"))
+                .AddTenantContext<TenantDbObjectTwoContext>(builder => builder.UseInMemoryDatabase("dsa"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -14,7 +14,7 @@ namespace MT.Core.UnitTests
 
         public TenantManagerTests()
         {
-            _manager = new TenantManager<TestTenantCatalogClass, Guid>(new TestTenantCatalogDbContextClass(new DbContextOptions<TestTenantCatalogDbContextClass>()));
+            _manager = new TenantManager<TestTenantCatalogClass, Guid>(new TestTenantCatalogDbDbContextClass(new DbContextOptions<TestTenantCatalogDbDbContextClass>()));
         }
         [Fact]
         public void ShouldAddSynchronouslyTenantToDatabase()
