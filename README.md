@@ -71,6 +71,28 @@ We need to create our context that will be used across the application for retri
     }
 ```
 
+## Usage specific tenant context
+```csharp
+    public class TestUsageOftenantContextService
+    {
+        private readonly ITenantDbContextFactory<TenantDbObjectContext> _factory;
+
+        public TestUsageOftenantContextService(ITenantDbContextFactory<TenantDbObjectContext> factory)
+        {
+            _factory = factory;
+        }
+
+        public void DoSomething()
+        {
+            // Be aware that before this u need to set TenantId in ITenantProvider
+            using (var context = _factory.Create())
+            {
+                //do some stuff
+            }
+        }
+    }
+```
+
 # Database Connection Support
 | Name | Supported |
 | :--: | :--: |
