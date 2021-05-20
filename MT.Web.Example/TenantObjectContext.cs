@@ -46,11 +46,11 @@ namespace MT.Web.Example
         {
         }
 
-        public TenantDbObjectTwoContext(
-            SqlConnectionStringBuilder connectionStringBuilder, 
-            ITenantProvider<TenantCatalog, Guid> tenantProvider,
-            IOnConfiguringDbContextOptionsBuilderProvider provider) : base(connectionStringBuilder, tenantProvider, provider)
-        {
-        }
+        // public TenantDbObjectTwoContext(
+        //     SqlConnectionStringBuilder connectionStringBuilder, 
+        //     ITenantProvider<TenantCatalog, Guid> tenantProvider,
+        //     IOnConfiguringDbContextOptionsBuilderProvider provider) : base(connectionStringBuilder, tenantProvider, provider)
+        // {
+        // }
     }
 }

@@ -19,11 +19,11 @@ namespace MT.Web.Example
             services.AddDbContext<TenantDbObjectContext>(builder =>
                 builder.UseSqlServer(
                     "Server=JMB-DK-07\\PUKACZ,6024;Database=MT;User Id=tenant;Password=tenant1234567;"));
-            services.AddMultiTenancy<TenantCatalog, Guid>()
-                .AddTenantCatalogContext<ExampleTenantCatalogDbContext>(builder => builder.UseInMemoryDatabase("dsa"))
-                .AddTenantContext<TenantDbObjectContext>(builder => builder.UseInMemoryDatabase("dsa"))
-                .AddTenantContext<TenantDbObjectTwoContext>(builder => builder.UseInMemoryDatabase("dsa"))
-                .UseInMemory();
+        services.AddMultiTenancy<TenantCatalog, Guid>()
+            .AddTenantCatalogContext<ExampleTenantCatalogDbContext>(builder => builder.UseInMemoryDatabase("test"))
+            .AddTenantContext<TenantDbObjectContext>(builder => builder.UseInMemoryDatabase("test"))
+            .AddTenantContext<TenantDbObjectTwoContext>(builder => builder.UseInMemoryDatabase("test"))
+            .UseInMemory();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,8 +33,8 @@ namespace MT.Web.Example
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseMultiTenancy<TenantCatalog, Guid>();
-            app.MigrateTenantDatabases<TenantCatalog, Guid>();
+            // app.UseMultiTenancy<TenantCatalog, Guid>();
+            // app.MigrateTenantDatabases<TenantCatalog, Guid>();
             app.UseHttpsRedirection();
 
             app.UseRouting();

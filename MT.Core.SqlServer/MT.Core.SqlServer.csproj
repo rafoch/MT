@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MultiTenancy.Core" Version="0.0.10" />
+    <ProjectReference Include="..\MT.Core\MT.Core.csproj" />
   </ItemGroup>
 
 </Project>

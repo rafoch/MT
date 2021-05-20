@@ -31,7 +31,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.5" />
-    <PackageReference Include="MultiTenancy.Core" Version="0.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MT.Core\MT.Core.csproj" />
   </ItemGroup>
 
 </Project>
