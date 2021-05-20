@@ -24,7 +24,7 @@ namespace MT.Core.UnitTests
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
-                optionsBuilder.UseInMemoryDatabase("test");
+                optionsBuilder.UseSqlServer("test");
                 base.OnConfiguring(optionsBuilder);
             }
         }
