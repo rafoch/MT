@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MT.Core.Context;
+using MT.Core.Interfaces;
 using MT.Core.Providers;
 using MT.Core.Services;
 using MT.Core.Validators;
@@ -16,6 +17,7 @@ namespace MT.Core.Model
     /// </summary>
     public class MultiTenancyBuilder
     {
+        private readonly List<Type> _customContextTypes = new List<Type>();
         /// <summary>
         /// Creates a new instance of <see cref="MultiTenancyBuilder"/>.
         /// </summary>
@@ -123,20 +125,25 @@ namespace MT.Core.Model
             where TTenantContext : DbContext
         {
             AddDbContextOptionsBuilder<TTenantContext>((provider, builder) => optiAction(builder));
-            var userManagerType = typeof(TenantDbContext<,>).MakeGenericType(TenantType, KeyType);
-            var customType = typeof(TTenantContext);
+            var tenantDbContextType = typeof(TenantDbContext<,>).MakeGenericType(TenantType, KeyType);
+            var customTenantContextType = typeof(TTenantContext);
+            _customContextTypes.Add(customTenantContextType);
             Services.AddDbContext<TTenantContext>(optiAction);
-            AddTenantFactory(userManagerType, customType);
-            return AddScoped(userManagerType, customType);
+            // AddTenantFactory(userManagerType, customType);
+            return AddScoped(tenantDbContextType, customTenantContextType);
         }
 
-        private MultiTenancyBuilder AddTenantFactory(Type userManagerType, Type type)
+        internal MultiTenancyBuilder AddTenantFactory(Type tenantFactoryType)
         {
-            var makeGenericType = typeof(TenantDbContextFactory<,,,>).MakeGenericType(type, TenantType, TenancyType, KeyType);
-            var customType = typeof(ITenantDbContextFactory<>).MakeGenericType(type);
-            return AddScoped(customType, makeGenericType);
+            foreach (var customContextType in _customContextTypes)
+            {
+                var makeGenericType = tenantFactoryType.MakeGenericType(customContextType, TenantType, TenancyType, KeyType);
+                var customType = typeof(Context.ITenantDbContextFactory<>).MakeGenericType(customContextType);
+                AddScoped(customType, makeGenericType);
+            }
+            return this;
         }
-
+        
         private MultiTenancyBuilder AddTenantProvider()
         {
             var userManagerType = typeof(TenantProvider<,>).MakeGenericType(TenantType, KeyType);
@@ -188,6 +195,12 @@ namespace MT.Core.Model
             optionsAction?.Invoke(applicationServiceProvider, builder);
 
             return builder.Options;
+        }
+
+        internal void RegisterOnConfiguringProvider(Type onConfiguringProvider)
+        {
+            var type = typeof(IOnConfiguringDbContextOptionsBuilderProvider);
+            AddScoped(type, onConfiguringProvider);
         }
     }
 }

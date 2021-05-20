@@ -2,6 +2,7 @@ using System;
 using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MT.Core.Context;
+using MT.Core.Interfaces;
 using MT.Core.Providers;
 
 namespace MT.Web.Example
@@ -9,15 +10,20 @@ namespace MT.Web.Example
     public class TenantDbObjectContext : TenantDbContext<TenantCatalog, Guid>
     {
         public TenantDbObjectContext(
-            ITenantProvider<TenantCatalog, Guid> provider,
-            DbContextOptions<TenantDbObjectContext> options) : base(provider, options)
+            ITenantProvider<TenantCatalog, Guid> tenantProvider,
+            DbContextOptions<TenantDbObjectContext> options) : base(tenantProvider, options)
         {
         }
 
         public TenantDbObjectContext(
             SqlConnectionStringBuilder connectionStringBuilder, 
-            ITenantProvider<TenantCatalog, Guid> provider) 
-            : base(connectionStringBuilder, provider)
+            ITenantProvider<TenantCatalog, Guid> tenantProvider,
+            IOnConfiguringDbContextOptionsBuilderProvider provider) 
+            : base(connectionStringBuilder, tenantProvider, provider)
+        {
+        }
+
+        protected TenantDbObjectContext(DbContextOptions connectionStringBuilder) : base(connectionStringBuilder)
         {
         }
 
@@ -34,11 +40,16 @@ namespace MT.Web.Example
     {
         public DbSet<TenantObjectTwo> TenantObjectTwos { get; set; }
 
-        public TenantDbObjectTwoContext(ITenantProvider<TenantCatalog, Guid> provider, DbContextOptions options) : base(provider, options)
+        public TenantDbObjectTwoContext(
+            ITenantProvider<TenantCatalog, Guid> tenantProvider, 
+            DbContextOptions options) : base(tenantProvider, options)
         {
         }
 
-        public TenantDbObjectTwoContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TenantCatalog, Guid> provider) : base(connectionStringBuilder, provider)
+        public TenantDbObjectTwoContext(
+            SqlConnectionStringBuilder connectionStringBuilder, 
+            ITenantProvider<TenantCatalog, Guid> tenantProvider,
+            IOnConfiguringDbContextOptionsBuilderProvider provider) : base(connectionStringBuilder, tenantProvider, provider)
         {
         }
     }

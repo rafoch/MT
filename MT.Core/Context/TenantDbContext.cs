@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Microsoft.Data.SqlClient;
+using System.Runtime.CompilerServices;
 using Microsoft.EntityFrameworkCore;
+using MT.Core.Interfaces;
 using MT.Core.Model;
 using MT.Core.Providers;
 using SqlConnectionStringBuilder = System.Data.SqlClient.SqlConnectionStringBuilder;
@@ -14,9 +17,9 @@ namespace MT.Core.Context
     {
         /// <inheritdoc />
         public TenantDbContext(
-            ITenantProvider<Tenant<string>, string> provider,
+            ITenantProvider<Tenant<string>, string> tenantProvider,
             DbContextOptions options)
-            : base(provider, options)
+            : base(tenantProvider, options)
         {
         }
 
@@ -29,26 +32,32 @@ namespace MT.Core.Context
     }
 
     /// <inheritdoc />
-    public class TenantDbContext<TTenant, TKey> : DbContext
+    public abstract class TenantDbContext<TTenant, TKey> : DbContext
         where TTenant : Tenant<TKey>
         where TKey : IEquatable<TKey>
     {
         private readonly SqlConnectionStringBuilder _connectionStringBuilder;
-        private readonly ITenantProvider<TTenant, TKey> _provider;
+        private readonly ITenantProvider<TTenant, TKey> _tenantProvider;
+        private readonly IOnConfiguringDbContextOptionsBuilderProvider _onConfiguringDbContextOptionsBuilderProvider;
 
         /// <inheritdoc />
-        public TenantDbContext(ITenantProvider<TTenant, TKey> provider,
+        protected TenantDbContext(
+            ITenantProvider<TTenant, TKey> tenantProvider,
             DbContextOptions options)
             : base(options)
         {
-            _provider = provider;
+            _tenantProvider = tenantProvider;
         }
 
         /// <inheritdoc />
-        protected TenantDbContext(SqlConnectionStringBuilder connectionStringBuilder, ITenantProvider<TTenant, TKey> provider)
+        public TenantDbContext(
+            [NotNull] SqlConnectionStringBuilder connectionStringBuilder,
+            [NotNull] ITenantProvider<TTenant, TKey> tenantProvider,
+            [NotNull]  IOnConfiguringDbContextOptionsBuilderProvider onConfiguringDbContextOptionsBuilderProvider)
         {
             _connectionStringBuilder = connectionStringBuilder;
-            _provider = provider;
+            _tenantProvider = tenantProvider;
+            _onConfiguringDbContextOptionsBuilderProvider = onConfiguringDbContextOptionsBuilderProvider;
         }
 
         /// <inheritdoc />
@@ -62,7 +71,7 @@ namespace MT.Core.Context
             if (_connectionStringBuilder != null)
             {
                 var sqlConnection = new SqlConnection(_connectionStringBuilder.ConnectionString.Replace(@"""", ""));
-                optionsBuilder.UseSqlServer(sqlConnection.ConnectionString);
+                _onConfiguringDbContextOptionsBuilderProvider.Provide(optionsBuilder, sqlConnection);
             }
 
             base.OnConfiguring(optionsBuilder);
@@ -87,7 +96,7 @@ namespace MT.Core.Context
                 builder.ToTable(entityType.Name);
                 builder.HasKey(entity => entity.Id);
                 builder.Property(entity => entity.TenantId).IsRequired();
-                builder.HasQueryFilter(filter => filter.TenantId.Equals(_provider.Get()));
+                builder.HasQueryFilter(filter => filter.TenantId.Equals(_tenantProvider.Get()));
             });
         }
     }

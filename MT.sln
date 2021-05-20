@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MT.Web.Example", "MT.Web.Ex
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2D88AFC2-94D4-4417-A066-D61A30637AAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MT.Core.UnitTests", "tests\MT.Core.UnitTests\MT.Core.UnitTests.csproj", "{7B2C80A0-A207-4D35-9078-AC06A81160C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MT.Core.UnitTests", "tests\MT.Core.UnitTests\MT.Core.UnitTests.csproj", "{7B2C80A0-A207-4D35-9078-AC06A81160C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MT.Core.SqlServer", "MT.Core.SqlServer\MT.Core.SqlServer.csproj", "{CDD6B4B2-F6C5-48C2-BF29-B3BF251BD6D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MT.Core.InMemory", "MT.Core.InMemory\MT.Core.InMemory.csproj", "{CDFB0BB4-08D4-414E-85B7-B979881568E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +33,14 @@ Global
 		{7B2C80A0-A207-4D35-9078-AC06A81160C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B2C80A0-A207-4D35-9078-AC06A81160C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B2C80A0-A207-4D35-9078-AC06A81160C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD6B4B2-F6C5-48C2-BF29-B3BF251BD6D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD6B4B2-F6C5-48C2-BF29-B3BF251BD6D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD6B4B2-F6C5-48C2-BF29-B3BF251BD6D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD6B4B2-F6C5-48C2-BF29-B3BF251BD6D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDFB0BB4-08D4-414E-85B7-B979881568E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDFB0BB4-08D4-414E-85B7-B979881568E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDFB0BB4-08D4-414E-85B7-B979881568E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDFB0BB4-08D4-414E-85B7-B979881568E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,10 +15,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MT.Core\MT.Core.csproj" />
+    <PackageReference Include="MT.Core.InMemory" Version="0.1.0" />
+    <PackageReference Include="MultiTenancy.Core" Version="0.1.0" />
   </ItemGroup>
 
 </Project>

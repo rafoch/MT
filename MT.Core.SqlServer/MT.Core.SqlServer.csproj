@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Rafał Ochotny</Authors>
+    <Company>Rafał Ochotny</Company>
+    <Product>Rafał Ochotny</Product>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/rafoch/MT</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Multitenancy;Database;Multi;Tenant;DbContext;Database;Context;Architecture;MultiTenant;Core;Entity;EntityFramework;Framework;SqlServer;Sql;Server</PackageTags>
+    <PackageReleaseNotes>- first release</PackageReleaseNotes>
+    <Version>0.0.10</Version>
+    <PackageId>MultiTenancy.Core.SqlServer</PackageId>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>G:\Users\Carlton Leatch\source\repos\Tenancy\MT\MT.Core.SqlServer\MT.Core.SqlServer.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MultiTenancy.Core" Version="0.0.10" />
+  </ItemGroup>
+
+</Project>

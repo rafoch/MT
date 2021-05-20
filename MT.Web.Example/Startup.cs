@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MT.Core.Extensions;
+using MT.Core.InMemory.Extensions;
 
 namespace MT.Web.Example
 {
@@ -21,7 +22,8 @@ namespace MT.Web.Example
             services.AddMultiTenancy<TenantCatalog, Guid>()
                 .AddTenantCatalogContext<ExampleTenantCatalogDbContext>(builder => builder.UseInMemoryDatabase("dsa"))
                 .AddTenantContext<TenantDbObjectContext>(builder => builder.UseInMemoryDatabase("dsa"))
-                .AddTenantContext<TenantDbObjectTwoContext>(builder => builder.UseInMemoryDatabase("dsa"));
+                .AddTenantContext<TenantDbObjectTwoContext>(builder => builder.UseInMemoryDatabase("dsa"))
+                .UseInMemory();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

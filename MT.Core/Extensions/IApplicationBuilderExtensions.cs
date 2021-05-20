@@ -94,7 +94,7 @@ namespace MT.Core.Extensions
                             database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory" && 
                             database.CanConnect())
                         {
-                            database.Migrate();
+                            // database.Migrate();
                         }
                     }
             }

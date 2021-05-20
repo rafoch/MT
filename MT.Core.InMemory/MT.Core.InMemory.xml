@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MT.Core.InMemory</name>
+    </assembly>
+    <members>
+        <member name="T:MT.Core.InMemory.Extensions.ServiceCollectionExtensions">
+            <inheritdoc cref="T:MT.Core.InMemory.Extensions.ServiceCollectionExtensions"/>
+        </member>
+        <member name="M:MT.Core.InMemory.Extensions.ServiceCollectionExtensions.UseInMemory(MT.Core.Model.MultiTenancyBuilder)">
+            <summary>
+            Register an <see cref="T:MT.Core.InMemory.Providers.InMemoryOnConfiguringDbContextOptionsBuilderProvider"/> provider and <see cref="T:MT.Core.InMemory.Factories.TenantDbContextFactory`4"/>
+            for InMemory Database
+            </summary>
+            <param name="service"><see cref="T:MT.Core.Model.MultiTenancyBuilder"/></param>
+            <returns><see cref="T:MT.Core.Model.MultiTenancyBuilder"/></returns>
+        </member>
+        <member name="T:MT.Core.InMemory.Factories.TenantDbContextFactory`4">
+            <inheritdoc />
+        </member>
+        <member name="M:MT.Core.InMemory.Factories.TenantDbContextFactory`4.#ctor(MT.Core.Providers.ITenantProvider{`1,`3},MT.Core.Services.TenantManager{`1,`3},MT.Core.Interfaces.IOnConfiguringDbContextOptionsBuilderProvider)">
+            <summary>
+            Creates new instance of <see cref="T:MT.Core.InMemory.Factories.TenantDbContextFactory`4"/>
+            </summary>
+            <param name="tenantProvider"><see cref="T:MT.Core.Providers.ITenantProvider`2"/></param>
+            <param name="tenantManager"><see cref="T:MT.Core.Services.TenantManager`1"/></param>
+            <param name="onConfiguringDbContextOptionsBuilderProvider"><see cref="T:MT.Core.Interfaces.IOnConfiguringDbContextOptionsBuilderProvider"/></param>
+        </member>
+        <member name="M:MT.Core.InMemory.Factories.TenantDbContextFactory`4.Create">
+            <inheritdoc />
+        </member>
+        <member name="M:MT.Core.InMemory.Factories.TenantDbContextFactory`4.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:MT.Core.InMemory.Providers.InMemoryOnConfiguringDbContextOptionsBuilderProvider">
+            <inheritdoc />
+        </member>
+        <member name="M:MT.Core.InMemory.Providers.InMemoryOnConfiguringDbContextOptionsBuilderProvider.Provide(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder,System.Data.SqlClient.SqlConnection)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

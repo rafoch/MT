@@ -20,6 +20,7 @@ jobs:
     - name: Dotnet build
       run: dotnet build --configuration Release --no-restore
   test:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -33,7 +34,8 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Dotnet test
       run: dotnet test --no-restore
-  publish-nuget:
+  publish-nuget-core:
+    needs: [build, test]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -49,6 +51,46 @@ jobs:
       uses: brandedoutcast/publish-nuget@v2
       with:
         PROJECT_FILE_PATH: MT.Core/MT.Core.csproj
+        VERSION_REGEX: '^\s*<Version>(.*)<\/Version>\s*$'
+        TAG_FORMAT: '*'
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+  publish-nuget-in-memory:
+    needs: [build, test, publish-nuget-core]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.202'
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Publish to NuGet
+      uses: brandedoutcast/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: MT.Core.InMemory/MT.Core.InMemory.csproj
+        VERSION_REGEX: '^\s*<Version>(.*)<\/Version>\s*$'
+        TAG_FORMAT: '*'
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+  publish-nuget-in-sql-server:
+    needs: [build, test, publish-nuget-core]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.202'
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Publish to NuGet
+      uses: brandedoutcast/publish-nuget@v2
+      with:
+        PROJECT_FILE_PATH: MT.Core.SqlServer/MT.Core.SqlServer.csproj
         VERSION_REGEX: '^\s*<Version>(.*)<\/Version>\s*$'
         TAG_FORMAT: '*'
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}

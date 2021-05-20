@@ -1,6 +1,7 @@
 ﻿using System;
+using MT.Core.Context;
 
-namespace MT.Core.Context
+namespace MT.Core.Interfaces
 {
     /// <inheritdoc />
     public interface ITenantDbContextFactory<out TContext> : IDisposable
