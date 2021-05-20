@@ -3,13 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>0.0.8</Version>
+        <Version>0.0.9</Version>
         <PackageId>MultiTenancy.Core</PackageId>
         <Product>MultiTenancy.Core</Product>
         <Authors>Rafał Ochotny</Authors>
         <Description>A lightway package to implement MultiTenancy architecture in your .NET Core Applications</Description>
-        <PackageReleaseNotes>- Now every method has a comment !
-- Added validation on adding tenant into database</PackageReleaseNotes>
+        <PackageReleaseNotes>- removed redundant InMemory Package
+- preparing to create another chilredn nuget packages for different connetions to databases</PackageReleaseNotes>
         <RepositoryUrl>https://github.com/rafoch/MT</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>Multitenancy;Database;Multi;Tenant;DbContext;Database;Context;Architecture;MultiTenant;Core;Entity;EntityFramework;Framework</PackageTags>
@@ -28,7 +28,6 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
         <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
